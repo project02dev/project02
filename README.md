@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
+# Project02 – Academic Project Marketplace SaaS
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/cd682e37-3146-43e3-88ed-913911ccfc2d
+**Project02** is a secure, company-owned SaaS platform designed to connect academic project creators with students seeking ready-made or custom academic projects. Drawing inspiration from platforms like Fiverr and Upwork, Project02 is purpose-built for academic project transactions, providing a streamlined, all-in-one marketplace for both creators and students.
 
-## How can I edit this code?
+> **Note:** Project02 is a proprietary solution and is not open source.
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## Table of Contents
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cd682e37-3146-43e3-88ed-913911ccfc2d) and start prompting.
+- [Objectives](#objectives)
+- [Key Features](#key-features)
+- [Revenue Model](#revenue-model)
+- [Security Model](#security-model)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+- [Deployment](#deployment)
+- [Contact](#contact)
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## Objectives
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Facilitate a secure, academic-focused marketplace for project transactions.
+- Enable creators to monetize their academic expertise.
+- Provide students with easy access to high-quality, ready-made or custom academic projects.
+- Ensure all communication and transactions occur within the platform.
+- Generate revenue through commissions and additional monetization strategies.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Key Features
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Student (Project Seeker)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Browse and purchase ready-made academic projects.
+- Request custom projects from vetted creators.
+- Secure in-platform chat with creators.
+- Track orders, delivery milestones, and view order history.
+- Provide reviews and feedback on completed projects.
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Creator
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- Upload and list academic projects for sale.
+- Accept and manage custom project requests.
+- Withdraw earnings after platform commission is applied.
+- Track orders, communicate with clients, and view performance analytics.
 
-**Edit a file directly in GitHub**
+### Admin
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- Manage users and verify creator credentials.
+- Moderate uploaded content and resolve disputes.
+- Monitor transactions, platform revenue, and oversee system security.
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Revenue Model
 
-## What technologies are used for this project?
+Project02 monetizes through:
 
-This project is built with:
+- **Commission** on each project sale or custom order (typically 15–30%).
+- **Featured listing fees** for projects or creators.
+- **Subscription tiers** offering enhanced visibility and advanced tools.
+- **Withdrawal processing fees** for creators.
+- **Affiliate links and sponsored ads** within the platform.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## Security Model
 
-Simply open [Lovable](https://lovable.dev/projects/cd682e37-3146-43e3-88ed-913911ccfc2d) and click on Share -> Publish.
+Project02 prioritizes security and compliance by implementing:
 
-## Can I connect a custom domain to my Lovable project?
+- Secure authentication and role-based authorization.
+- Controlled file delivery and watermarked previews.
+- Rate-limiting and input sanitization.
+- Payment protection and transaction monitoring.
+- Admin oversight for content moderation and dispute resolution.
 
-Yes, you can!
+---
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Technology Stack
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **Frontend:** React, TypeScript, Vite, shadcn-ui, Tailwind CSS
+- **Backend:** Supabase (PostgreSQL, Auth, Storage)
+- **Other:** Node.js, npm
+
+---
+
+## Getting Started
+
+> **Note:** You must have Node.js and npm installed.
+
+1. **Clone the repository:**
+
+   ```sh
+   git clone <YOUR_GIT_URL>
+   cd <YOUR_PROJECT_NAME>
+   ```
+
+2. **Install dependencies:**
+
+   ```sh
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```sh
+   npm run dev
+   ```
+
+---
+
+## Deployment
+
+Deployment is managed via the [Lovable Platform](https://lovable.dev/projects/cd682e37-3146-43e3-88ed-913911ccfc2d).  
+To publish, open the project in Lovable and use the Share → Publish feature.
+
+---
+
+## Contact
+
+For business inquiries, licensing, or support, please contact your company administrator or visit the
