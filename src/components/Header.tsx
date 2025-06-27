@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Search, User, Menu, X, ShoppingBag, MessageCircle, Bell } from 'lucide-react'
+import { Search, User, Menu, X, ShoppingBag, MessageCircle, Bell, Moon, Sun } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,9 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useTheme } from '@/contexts/ThemeContext'
 
 export const Header = () => {
   const { user, profile, signOut } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -24,9 +26,13 @@ export const Header = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600" />
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              CraftConnect
+            <img 
+              src="/lovable-uploads/741cf823-96bd-4315-a0b0-2cf8a87a72be.png" 
+              alt="PROJECT02" 
+              className="h-8 w-8"
+            />
+            <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              PROJECT02
             </span>
           </Link>
 
@@ -43,18 +49,29 @@ export const Header = () => {
 
           {/* Navigation */}
           <nav className="flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <Button variant="ghost" size="icon" onClick={toggleTheme}>
+              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+
             {user ? (
               <>
                 {/* Navigation Icons */}
                 <div className="hidden md:flex items-center space-x-3">
-                  <Button variant="ghost" size="icon">
-                    <ShoppingBag className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to={profile?.role === 'creator' ? '/creator/orders' : '/student/orders'}>
+                      <ShoppingBag className="h-5 w-5" />
+                    </Link>
                   </Button>
-                  <Button variant="ghost" size="icon">
-                    <MessageCircle className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to={profile?.role === 'creator' ? '/creator/messages' : '/student/messages'}>
+                      <MessageCircle className="h-5 w-5" />
+                    </Link>
                   </Button>
-                  <Button variant="ghost" size="icon">
-                    <Bell className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" asChild>
+                    <Link to={profile?.role === 'creator' ? '/creator/notifications' : '/student/notifications'}>
+                      <Bell className="h-5 w-5" />
+                    </Link>
                   </Button>
                 </div>
 
@@ -72,10 +89,14 @@ export const Header = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end">
                     <DropdownMenuItem asChild>
-                      <Link to="/dashboard">Dashboard</Link>
+                      <Link to={profile?.role === 'creator' ? '/creator/dashboard' : profile?.role === 'admin' ? '/admin/dashboard' : '/student/dashboard'}>
+                        Dashboard
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/profile">Profile</Link>
+                      <Link to={profile?.role === 'creator' ? '/creator/profile' : '/student/profile'}>
+                        Profile
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={signOut}>
@@ -89,7 +110,7 @@ export const Header = () => {
                 <Button variant="ghost" asChild>
                   <Link to="/auth">Sign In</Link>
                 </Button>
-                <Button asChild>
+                <Button asChild className="bg-green-600 hover:bg-green-700">
                   <Link to="/auth?mode=signup">Sign Up</Link>
                 </Button>
               </div>
@@ -119,13 +140,19 @@ export const Header = () => {
               {user && (
                 <div className="flex flex-col space-y-2">
                   <Button variant="ghost" className="justify-start" asChild>
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to={profile?.role === 'creator' ? '/creator/dashboard' : profile?.role === 'admin' ? '/admin/dashboard' : '/student/dashboard'}>
+                      Dashboard
+                    </Link>
                   </Button>
                   <Button variant="ghost" className="justify-start" asChild>
-                    <Link to="/orders">Orders</Link>
+                    <Link to={profile?.role === 'creator' ? '/creator/orders' : '/student/orders'}>
+                      Orders
+                    </Link>
                   </Button>
                   <Button variant="ghost" className="justify-start" asChild>
-                    <Link to="/messages">Messages</Link>
+                    <Link to={profile?.role === 'creator' ? '/creator/messages' : '/student/messages'}>
+                      Messages
+                    </Link>
                   </Button>
                 </div>
               )}
