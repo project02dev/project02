@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { supabase, Profile } from "@/lib/supabase";
+import { supabase, Profile } from "@/lib/supabase"; // Ensure this path is correct
 
+// Define the shape of the Auth context
 interface AuthContextType {
   user: User | null;
   profile: Profile | null;
@@ -14,10 +15,13 @@ interface AuthContextType {
     role: "student" | "creator"
   ) => Promise<void>;
   signOut: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
 }
 
+// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Custom hook to use the Auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -26,6 +30,7 @@ export const useAuth = () => {
   return context;
 };
 
+// The AuthProvider component that wraps your app
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -33,86 +38,99 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch profile helper
+  // Centralized function to fetch a user's profile
   const fetchProfile = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
-      if (error) throw error;
-      setProfile(data);
-    } catch (error) {
-      setProfile(null);
-      console.error("Error fetching profile:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Listen for auth changes and handle profile creation if needed
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        handleProfile(session.user);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        await handleProfile(session.user);
-      } else {
-        setProfile(null);
-        setLoading(false);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-    // eslint-disable-next-line
-  }, []);
-
-  // Create profile if it doesn't exist, using localStorage for pending sign up info
-  const handleProfile = async (user: User) => {
-    setLoading(true);
-    const { data: profileData, error: profileError } = await supabase
+    const { data, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", user.id)
+      .eq("id", userId)
       .single();
 
-    if (!profileData && !profileError) {
-      // No profile exists, try to create one from localStorage
-      const username = localStorage.getItem("pending_username");
-      const role = localStorage.getItem("pending_role");
-      if (username && role) {
-        const { error: insertError } = await supabase.from("profiles").insert([
+    if (error) {
+      console.error("Error fetching profile:", error);
+      return null;
+    }
+    return data;
+  };
+
+  // Handles profile creation if one doesn't exist
+  const handleProfile = async (user: User) => {
+    let userProfile = await fetchProfile(user.id);
+
+    if (!userProfile) {
+      // If no profile exists, create one
+      const username =
+        localStorage.getItem("pending_username") ||
+        user.user_metadata.full_name ||
+        user.email?.split("@")[0]; // Fallback to email prefix
+
+      const role =
+        (localStorage.getItem("pending_role") as Profile["role"]) || "student";
+
+      const { data: newUserProfile, error: insertError } = await supabase
+        .from("profiles")
+        .insert([
           {
             id: user.id,
             username,
+            full_name: user.user_metadata.full_name,
+            avatar_url: user.user_metadata.avatar_url,
             role,
-            full_name: username,
           },
-        ]);
-        if (insertError) {
-          console.error("Error creating profile:", insertError);
-        } else {
-          // Clean up
-          localStorage.removeItem("pending_username");
-          localStorage.removeItem("pending_role");
-        }
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("Error creating profile:", insertError);
+      } else {
+        userProfile = newUserProfile;
+        // Clean up localStorage after profile creation
+        localStorage.removeItem("pending_username");
+        localStorage.removeItem("pending_role");
       }
     }
-    await fetchProfile(user.id);
+    setProfile(userProfile);
   };
+
+  // useEffect to manage session and auth state changes
+  useEffect(() => {
+    const getActiveSession = async () => {
+      setLoading(true);
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        await handleProfile(session.user);
+      }
+      setLoading(false);
+    };
+
+    getActiveSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setLoading(true);
+      setUser(session?.user ?? null);
+      if (
+        session?.user &&
+        (event === "SIGNED_IN" || event === "USER_UPDATED")
+      ) {
+        await handleProfile(session.user);
+      } else if (event === "SIGNED_OUT") {
+        setProfile(null);
+      }
+      setLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  // --- Auth Functions ---
 
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -128,12 +146,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     username: string,
     role: "student" | "creator"
   ) => {
-    // Store pending profile info for after auth
+    // Store metadata in localStorage to be used after the user confirms their email
     localStorage.setItem("pending_username", username);
     localStorage.setItem("pending_role", role);
+
     const { error } = await supabase.auth.signUp({ email, password });
-    if (error) throw error;
-    // Do not create profile here; it will be handled after auth state change
+
+    if (error) {
+      // If sign-up fails, clean up localStorage
+      localStorage.removeItem("pending_username");
+      localStorage.removeItem("pending_role");
+      throw error;
+    }
   };
 
   const signOut = async () => {
@@ -141,6 +165,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (error) throw error;
   };
 
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        // Optional: redirect to a specific page after Google auth
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) throw error;
+  };
+
+  // The value provided to the context consumers
   const value = {
     user,
     profile,
@@ -148,6 +184,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     signIn,
     signUp,
     signOut,
+    signInWithGoogle,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
