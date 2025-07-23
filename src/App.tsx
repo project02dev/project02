@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,22 +39,31 @@ const App = () => (
                   <Route path="/auth" element={<AuthPage />} />
                   <Route path="/projects" element={<ProjectsPage />} />
                   <Route path="/projects/:id" element={<ProjectDetailPage />} />
-                  <Route path="/custom-request" element={<CustomRequestPage />} />
+                  <Route
+                    path="/custom-request"
+                    element={<CustomRequestPage />}
+                  />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/contact" element={<ContactPage />} />
                   <Route path="/faq" element={<FAQPage />} />
                   <Route path="/terms" element={<TermsPage />} />
                   <Route path="/privacy" element={<PrivacyPage />} />
-                  
+
                   {/* Student Routes */}
-                  <Route path="/student/dashboard" element={<StudentDashboard />} />
-                  
+                  <Route
+                    path="/student/dashboard"
+                    element={<StudentDashboard />}
+                  />
+
                   {/* Creator Routes */}
-                  <Route path="/creator/dashboard" element={<CreatorDashboard />} />
-                  
+                  <Route
+                    path="/creator/dashboard"
+                    element={<CreatorDashboard />}
+                  />
+
                   {/* Admin Routes */}
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                  
+
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
