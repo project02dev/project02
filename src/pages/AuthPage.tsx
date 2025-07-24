@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Assuming you have a Google icon component
 const GoogleIcon = () => (
@@ -43,12 +44,16 @@ const GoogleIcon = () => (
 export const AuthPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { signIn, signUp, signInWithGoogle } = useAuth();
+  const { signIn, signUp, signInWithGoogle, resendConfirmation, resetPassword } = useAuth();
   const { toast } = useToast();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState("");
 
   // Sign In Form
   const [signInForm, setSignInForm] = useState({
@@ -78,14 +83,31 @@ export const AuthPage = () => {
         title: "Welcome back!",
         description: "You have been signed in successfully.",
       });
-      navigate("/");
+      
+      // Check if onboarding is completed
+      const onboardingCompleted = localStorage.getItem('onboarding_completed');
+      if (!onboardingCompleted) {
+        navigate("/onboarding");
+      } else {
+        navigate("/");
+      }
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Sign in failed",
-        description:
-          error.message || "Please check your credentials and try again.",
-      });
+      if (error.message.includes('Email not confirmed')) {
+        setNeedsEmailConfirmation(true);
+        setPendingEmail(signInForm.email);
+        toast({
+          variant: "destructive",
+          title: "Email not verified",
+          description: "Please check your email and click the verification link.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Sign in failed",
+          description:
+            error.message || "Please check your credentials and try again.",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -125,7 +147,8 @@ export const AuthPage = () => {
         title: "Account created!",
         description: "Please check your email to verify your account.",
       });
-      navigate("/");
+      setNeedsEmailConfirmation(true);
+      setPendingEmail(signUpForm.email);
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -347,20 +370,106 @@ export const AuthPage = () => {
             </div>
           </div>
 
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-            disabled={googleLoading}
-          >
-            {googleLoading ? (
-              "Redirecting..."
-            ) : (
-              <>
-                <GoogleIcon /> Google
-              </>
-            )}
-          </Button>
+          {needsEmailConfirmation && (
+            <Alert className="mb-4">
+              <AlertDescription>
+                Please check your email ({pendingEmail}) for a verification link.
+                <Button
+                  variant="link"
+                  className="p-0 h-auto text-primary"
+                  onClick={async () => {
+                    try {
+                      await resendConfirmation(pendingEmail);
+                      toast({
+                        title: "Email sent!",
+                        description: "Check your inbox for the verification link.",
+                      });
+                    } catch (error: any) {
+                      toast({
+                        variant: "destructive",
+                        title: "Failed to resend",
+                        description: error.message,
+                      });
+                    }
+                  }}
+                >
+                  Resend verification email
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {showForgotPassword ? (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="forgot-email">Email</Label>
+                <Input
+                  id="forgot-email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={forgotPasswordEmail}
+                  onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      await resetPassword(forgotPasswordEmail);
+                      toast({
+                        title: "Reset email sent!",
+                        description: "Check your email for password reset instructions.",
+                      });
+                      setShowForgotPassword(false);
+                    } catch (error: any) {
+                      toast({
+                        variant: "destructive",
+                        title: "Failed to send reset email",
+                        description: error.message,
+                      });
+                    }
+                  }}
+                  className="flex-1"
+                >
+                  Send Reset Email
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowForgotPassword(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <Button
+                variant="link"
+                className="w-full text-sm"
+                onClick={() => setShowForgotPassword(true)}
+              >
+                Forgot your password?
+              </Button>
+
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogleSignIn}
+                disabled={googleLoading}
+              >
+                {googleLoading ? (
+                  "Redirecting..."
+                ) : (
+                  <>
+                    <GoogleIcon /> Google
+                  </>
+                )}
+              </Button>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
