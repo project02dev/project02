@@ -31,6 +31,11 @@ import { TermsPage } from "@/pages/TermsPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
 import { SupportPage } from "@/pages/SupportPage";
 import { OnboardingPage } from "@/pages/OnboardingPage";
+import { VerifyEmailPage } from "@/pages/VerifyEmailPage";
+import { ResetPasswordPage } from "@/pages/ResetPasswordPage";
+import { ProfilePage } from "@/pages/ProfilePage";
+import { SettingsPage } from "@/pages/SettingsPage";
+import { DashboardPage } from "@/pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -60,6 +65,11 @@ const App = () => (
                   
                   <Route path="/support" element={<SupportPage />} />
                   <Route path="/onboarding" element={<OnboardingPage />} />
+                  <Route path="/verify-email" element={<VerifyEmailPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="/dashboard" element={<DashboardPage />} />
                   
                   {/* Student Routes */}
                   <Route path="/student/dashboard" element={<StudentDashboard />} />
