@@ -16,6 +16,8 @@ interface AuthContextType {
   ) => Promise<void>;
   signOut: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
+  resendConfirmation: (email: string) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 // Create the context
@@ -169,9 +171,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        // Optional: redirect to a specific page after Google auth
-        redirectTo: window.location.origin,
+        redirectTo: `${window.location.origin}/onboarding`,
       },
+    });
+    if (error) throw error;
+  };
+
+  const resendConfirmation = async (email: string) => {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
+    });
+    if (error) throw error;
+  };
+
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/auth?mode=reset`,
     });
     if (error) throw error;
   };
@@ -185,6 +201,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     signUp,
     signOut,
     signInWithGoogle,
+    resendConfirmation,
+    resetPassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
