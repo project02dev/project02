@@ -30,6 +30,11 @@ import { TermsPage } from "@/pages/TermsPage";
 import { PrivacyPage } from "@/pages/PrivacyPage";
 import { SupportPage } from "@/pages/SupportPage";
 import { OnboardingPage } from "@/pages/OnboardingPage";
+import { VerifyEmailPage } from "@/pages/VerifyEmailPage";
+import { ResetPasswordPage } from "@/pages/ResetPasswordPage";
+import { ProfilePage } from "@/pages/ProfilePage";
+import { SettingsPage } from "@/pages/SettingsPage";
+import { DashboardPage } from "@/pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,6 +64,9 @@ const App = () => (
                   <Route path="/faq" element={<FAQPage />} />
                   <Route path="/terms" element={<TermsPage />} />
                   <Route path="/privacy" element={<PrivacyPage />} />
+
+                  <Route path="/support" element={<SupportPage />} />
+                  <Route path="/onboarding" element={<OnboardingPage />} />
 
                   {/* Student Routes */}
                   <Route

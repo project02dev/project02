@@ -16,6 +16,8 @@ export interface Profile {
   full_name?: string;
   avatar_url?: string;
   bio?: string;
+  phone?: string;
+  location?: string;
   role: "student" | "creator" | "admin";
   is_verified: boolean;
   created_at: string;
