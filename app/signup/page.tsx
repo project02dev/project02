@@ -12,6 +12,9 @@ import { StageVerification } from "@/components/front-pages/signup/StageVerifica
 import { signInWithGoogle, signInWithGithub } from "@/lib/firebase/auth";
 
 interface FormData {
+  university: any;
+  department: any;
+  verificationType: any;
   fullName?: string;
   email?: string;
   password?: string;
@@ -38,7 +41,23 @@ export default function SignupPage() {
   const [currentStage, setCurrentStage] = useState(0);
   const [role, setRole] = useState<Role>("student");
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<FormData>({});
+  const [formData, setFormData] = useState<FormData>({
+    university: undefined,
+    department: undefined,
+    verificationType: undefined,
+    fullName: "",
+    email: "",
+    password: "",
+    username: "",
+    country: "",
+    phone: "",
+    dob: "",
+    documents: {
+      id: undefined,
+      education: undefined,
+      professional: undefined,
+    },
+  });
   const [verificationTypes, setVerificationTypes] = useState<
     Array<{
       id: string;
@@ -143,6 +162,9 @@ export default function SignupPage() {
       const { auth } = await import("@/lib/firebase/config");
 
       // Create user with Firebase Auth
+      if (!formData.email || !formData.password) {
+        throw new Error("Email and password are required.");
+      }
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
