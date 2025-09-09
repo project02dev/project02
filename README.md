@@ -1,124 +1,36 @@
-# Project02 – Academic Project Marketplace SaaS
-
-## Overview
-
-**Project02** is a secure, company-owned SaaS platform designed to connect academic project creators with students seeking ready-made or custom academic projects. Drawing inspiration from platforms like Fiverr and Upwork, Project02 is purpose-built for academic project transactions, providing a streamlined, all-in-one marketplace for both creators and students.
-
-> **Note:** Project02 is a proprietary solution and is not open source.
-
----
-
-## Table of Contents
-
-- [Objectives](#objectives)
-- [Key Features](#key-features)
-- [Revenue Model](#revenue-model)
-- [Security Model](#security-model)
-- [Technology Stack](#technology-stack)
-- [Getting Started](#getting-started)
-- [Deployment](#deployment)
-- [Contact](#contact)
-
----
-
-## Objectives
-
-- Facilitate a secure, academic-focused marketplace for project transactions.
-- Enable creators to monetize their academic expertise.
-- Provide students with easy access to high-quality, ready-made or custom academic projects.
-- Ensure all communication and transactions occur within the platform.
-- Generate revenue through commissions and additional monetization strategies.
-
----
-
-## Key Features
-
-### Student (Project Seeker)
-
-- Browse and purchase ready-made academic projects.
-- Request custom projects from vetted creators.
-- Secure in-platform chat with creators.
-- Track orders, delivery milestones, and view order history.
-- Provide reviews and feedback on completed projects.
-
-### Creator
-
-- Upload and list academic projects for sale.
-- Accept and manage custom project requests.
-- Withdraw earnings after platform commission is applied.
-- Track orders, communicate with clients, and view performance analytics.
-
-### Admin
-
-- Manage users and verify creator credentials.
-- Moderate uploaded content and resolve disputes.
-- Monitor transactions, platform revenue, and oversee system security.
-
----
-
-## Revenue Model
-
-Project02 monetizes through:
-
-- **Commission** on each project sale or custom order (typically 15–30%).
-- **Featured listing fees** for projects or creators.
-- **Subscription tiers** offering enhanced visibility and advanced tools.
-- **Withdrawal processing fees** for creators.
-- **Affiliate links and sponsored ads** within the platform.
-
----
-
-## Security Model
-
-Project02 prioritizes security and compliance by implementing:
-
-- Secure authentication and role-based authorization.
-- Controlled file delivery and watermarked previews.
-- Rate-limiting and input sanitization.
-- Payment protection and transaction monitoring.
-- Admin oversight for content moderation and dispute resolution.
-
----
-
-## Technology Stack
-
-- **Frontend:** React, TypeScript, Vite, shadcn-ui, Tailwind CSS
-- **Backend:** Supabase (PostgreSQL, Auth, Storage)
-- **Other:** Node.js, npm
-
----
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-> **Note:** You must have Node.js and npm installed.
+First, run the development server:
 
-1. **Clone the repository:**
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-   ```sh
-   git clone <YOUR_GIT_URL>
-   cd <YOUR_PROJECT_NAME>
-   ```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-2. **Install dependencies:**
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-   ```sh
-   npm install
-   ```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-3. **Start the development server:**
-   ```sh
-   npm run dev
-   ```
+## Learn More
 
----
+To learn more about Next.js, take a look at the following resources:
 
-## Deployment
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Deployment is managed via the [Lovable Platform](https://lovable.dev/projects/cd682e37-3146-43e3-88ed-913911ccfc2d).  
-To publish, open the project in Lovable and use the Share → Publish feature.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
----
+## Deploy on Vercel
 
-## Contact
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-For business inquiries, licensing, or support, please contact your company administrator or visit the
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

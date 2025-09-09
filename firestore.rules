@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read and write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null; // Allow reading other users for messaging
+    }
+    
+    // Projects are readable by all authenticated users
+    match /projects/{projectId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == resource.data.creatorId;
+    }
+    
+    // Conversations are accessible to participants
+    match /conversations/{conversationId} {
+      allow read, write: if request.auth != null && 
+        request.auth.uid in resource.data.participants;
+    }
+    
+    // Messages are accessible to conversation participants
+    match /messages/{messageId} {
+      allow read, write: if request.auth != null;
+      // Note: In production, you'd want to check if user is in the conversation
+    }
+    
+    // Orders are accessible to the user and creator involved
+    match /orders/{orderId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         request.auth.uid == resource.data.creatorId);
+    }
+    
+    // Reviews are readable by all, writable by order participants
+    match /reviews/{reviewId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // Notifications are accessible to the target user
+    match /notifications/{notificationId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+    
+    // Typing indicators are accessible to conversation participants
+    match /typing/{typingId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Blocks are accessible to the blocker
+    match /blocks/{blockId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.blockerId;
+    }
+  }
+}

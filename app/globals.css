@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar utilities */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Mobile-first responsive utilities */
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6;
+  }
+
+  /* Touch-friendly button sizes */
+  .btn-mobile {
+    @apply min-h-[44px] px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200;
+  }
+
+  /* Responsive text sizes */
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+
+  .text-responsive-lg {
+    @apply text-base sm:text-lg lg:text-xl;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+}
+
+@layer utilities {
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+}
+
+/* Phone Input Custom Styles */
+.PhoneInput {
+  @apply flex items-center gap-2;
+}
+
+.PhoneInputCountry {
+  @apply flex items-center gap-1;
+}
+
+.PhoneInputCountrySelect {
+  @apply p-1 rounded border border-gray-300;
+}
+
+.PhoneInputInput {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500;
+}
+
+.PhoneInputInput--invalid {
+  @apply border-red-500 focus:ring-red-500 focus:border-red-500;
+}
