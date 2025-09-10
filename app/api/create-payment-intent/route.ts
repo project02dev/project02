@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   try {
     const {
       amount,
-      currency = "usd",
+      currency = "usd",  
       projectId,
       userId,
     } = await request.json();
