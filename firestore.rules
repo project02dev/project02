@@ -1,56 +1,117 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read and write their own user document
+    // Helper functions
+    function isAuth() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuth() && request.auth.token.admin == true;
+    }
+    
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+    
+    function isProjectOwner(projectId) {
+      return isAuth() && resource.data.creatorId == request.auth.uid;
+    }
+
+    // Users collection: user can read/write their own profile, admin can read all
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null; // Allow reading other users for messaging
+      allow create: if isAuth() && request.auth.uid == userId;
+      allow read, update, delete: if isAdmin() || isOwner(userId);
     }
-    
-    // Projects are readable by all authenticated users
+
+    // Projects collection: public read, authenticated create, owner/admin update/delete
     match /projects/{projectId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == resource.data.creatorId;
+      allow read: if true; // Public read access
+      allow create: if isAuth() && request.resource.data.creatorId == request.auth.uid;
+      allow update, delete: if isAdmin() || isProjectOwner(projectId);
+      
+      // Allow authenticated users to update only totalLikes field
+      allow update: if isAuth() && 
+        request.resource.data.keys().hasOnly(['totalLikes', 'updatedAt']) &&
+        request.resource.data.totalLikes is number;
     }
-    
-    // Conversations are accessible to participants
-    match /conversations/{conversationId} {
-      allow read, write: if request.auth != null && 
-        request.auth.uid in resource.data.participants;
+
+    // Likes collection: public read, authenticated create/delete of own likes
+    match /likes/{likeId} {
+      allow read: if true; // Public read access
+      allow create: if isAuth() && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.userId == request.auth.uid;
+      allow update: if false; // No updates allowed
     }
-    
-    // Messages are accessible to conversation participants
-    match /messages/{messageId} {
-      allow read, write: if request.auth != null;
-      // Note: In production, you'd want to check if user is in the conversation
-    }
-    
-    // Orders are accessible to the user and creator involved
+
+    // Orders collection: accessible to involved users
     match /orders/{orderId} {
-      allow read, write: if request.auth != null && 
-        (request.auth.uid == resource.data.userId || 
-         request.auth.uid == resource.data.creatorId);
+      allow create: if isAuth() && (
+        request.resource.data.studentId == request.auth.uid ||
+        request.resource.data.creatorId == request.auth.uid
+      );
+      allow read, update, delete: if isAdmin() || (
+        isAuth() && (
+          resource.data.studentId == request.auth.uid ||
+          resource.data.creatorId == request.auth.uid
+        )
+      );
     }
-    
-    // Reviews are readable by all, writable by order participants
+
+    // Conversations collection: accessible to participants
+    match /conversations/{conversationId} {
+      allow read, write: if isAdmin() || (
+        isAuth() && request.auth.uid in resource.data.participants
+      );
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        allow create: if isAdmin() || (
+          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants
+        );
+        allow read, update, delete: if isAdmin() || (
+          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants
+        );
+      }
+    }
+
+    // Reviews collection: public read, authenticated create/delete of own reviews
     match /reviews/{reviewId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow read: if true;
+      allow create: if isAuth() && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if isAdmin() || (isAuth() && resource.data.authorId == request.auth.uid);
     }
-    
-    // Notifications are accessible to the target user
+
+    // Notifications collection: user can read their own notifications
     match /notifications/{notificationId} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if isAdmin() || isAuth();
+      allow read, update, delete: if isAdmin() || (isAuth() && resource.data.userId == request.auth.uid);
     }
-    
-    // Typing indicators are accessible to conversation participants
+
+    // Project stats collection: public read, admin write
+    match /projectStats/{projectId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Typing indicators: authenticated access
     match /typing/{typingId} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAuth();
     }
-    
-    // Blocks are accessible to the blocker
+
+    // Blocks collection: user can manage their own blocks
     match /blocks/{blockId} {
-      allow read, write: if request.auth != null && request.auth.uid == resource.data.blockerId;
+      allow read, write: if isAuth() && request.auth.uid == resource.data.blockerId;
+    }
+
+    // Admin-only collections
+    match /admin/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Default: deny everything else
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
