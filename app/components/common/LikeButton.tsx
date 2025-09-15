@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase/config";
-import { likesService } from "@/lib/services/likesService";
+import { minimalLikesService } from "@/lib/services/minimalLikesService";
 import { analyticsService } from "@/lib/database";
 import { FiHeart } from "react-icons/fi";
 import { useRouter } from "next/navigation";
@@ -46,11 +46,14 @@ export default function LikeButton({
     if (!user) return;
 
     try {
-      const hasLiked = await likesService.hasUserLiked(projectId, user.uid);
+      const hasLiked = await minimalLikesService.hasUserLiked(
+        projectId,
+        user.uid
+      );
       setIsLiked(hasLiked);
 
       // Get current likes count
-      const count = await likesService.getProjectLikesCount(projectId);
+      const count = await minimalLikesService.getProjectLikesCount(projectId);
       setLikesCount(count);
     } catch (error) {
       console.error("Error checking user like:", error);
@@ -69,27 +72,28 @@ export default function LikeButton({
     setIsAnimating(true);
 
     try {
-      const result = await likesService.toggleLike(projectId, user.uid);
+      const { liked } = await minimalLikesService.toggleLike(
+        projectId,
+        user.uid
+      );
+      setIsLiked(liked);
 
-      if (result.success) {
-        setIsLiked(result.isLiked);
-        setLikesCount(result.totalLikes);
+      // Get updated likes count
+      const count = await minimalLikesService.getProjectLikesCount(projectId);
+      setLikesCount(count);
 
-        // Track analytics for like/unlike
-        if (creatorId) {
-          analyticsService.trackProjectLike(
-            user.uid,
-            projectId,
-            creatorId,
-            result.isLiked
-          );
-        }
-
-        // Trigger animation
-        setTimeout(() => setIsAnimating(false), 300);
-      } else {
-        console.error("Error toggling like:", result.error);
+      // Track analytics for like/unlike
+      if (creatorId) {
+        analyticsService.trackProjectLike(
+          user.uid,
+          projectId,
+          creatorId,
+          liked
+        );
       }
+
+      // Trigger animation
+      setTimeout(() => setIsAnimating(false), 300);
     } catch (error) {
       console.error("Error handling like:", error);
     } finally {
