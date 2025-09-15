@@ -1,50 +1,44 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper functions
+
     function isAuth() {
       return request.auth != null;
     }
-    
+
     function isAdmin() {
       return isAuth() && request.auth.token.admin == true;
     }
-    
-    function isOwner(userId) {
-      return isAuth() && request.auth.uid == userId;
-    }
-    
-    function isProjectOwner(projectId) {
-      return isAuth() && resource.data.creatorId == request.auth.uid;
-    }
 
-    // Users collection: user can read/write their own profile, admin can read all
+    // Users collection
     match /users/{userId} {
       allow create: if isAuth() && request.auth.uid == userId;
-      allow read, update, delete: if isAdmin() || isOwner(userId);
+      allow read, update, delete: if isAdmin() || (isAuth() && request.auth.uid == userId);
     }
 
-    // Projects collection: public read, authenticated create, owner/admin update/delete
+    // Projects collection
     match /projects/{projectId} {
-      allow read: if true; // Public read access
+      allow read: if true;
       allow create: if isAuth() && request.resource.data.creatorId == request.auth.uid;
-      allow update, delete: if isAdmin() || isProjectOwner(projectId);
-      
-      // Allow authenticated users to update only totalLikes field
-      allow update: if isAuth() && 
-        request.resource.data.keys().hasOnly(['totalLikes', 'updatedAt']) &&
+      allow delete: if isAdmin() || (isAuth() && resource.data.creatorId == request.auth.uid);
+      allow update: if isAdmin() || (isAuth() && resource.data.creatorId == request.auth.uid);
+
+      // Allow any authenticated client to update only totalLikes and totalLikesUpdatedAt
+      allow update: if isAuth() &&
+        request.resource.data.keys().hasOnly(resource.data.keys().union(['totalLikes','totalLikesUpdatedAt'])) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalLikes','totalLikesUpdatedAt']) &&
         request.resource.data.totalLikes is number;
+
+      // Likes subcollection
+      match /likes/{userId} {
+        allow read: if true;
+        allow create: if isAuth() && request.auth.uid == userId;
+        allow delete: if isAuth() && request.auth.uid == userId;
+        allow update: if false;
+      }
     }
 
-    // Likes collection: public read, authenticated create/delete of own likes
-    match /likes/{likeId} {
-      allow read: if true; // Public read access
-      allow create: if isAuth() && request.resource.data.userId == request.auth.uid;
-      allow delete: if isAuth() && resource.data.userId == request.auth.uid;
-      allow update: if false; // No updates allowed
-    }
-
-    // Orders collection: accessible to involved users
+    // Orders collection
     match /orders/{orderId} {
       allow create: if isAuth() && (
         request.resource.data.studentId == request.auth.uid ||
@@ -58,58 +52,41 @@ service cloud.firestore {
       );
     }
 
-    // Conversations collection: accessible to participants
-    match /conversations/{conversationId} {
+    // Conversations and messages
+    match /conversations/{convId} {
       allow read, write: if isAdmin() || (
         isAuth() && request.auth.uid in resource.data.participants
       );
-      
-      // Messages subcollection
-      match /messages/{messageId} {
+
+      match /messages/{msgId} {
         allow create: if isAdmin() || (
-          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants
+          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(convId)).data.participants
         );
         allow read, update, delete: if isAdmin() || (
-          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants
+          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(convId)).data.participants
         );
       }
     }
 
-    // Reviews collection: public read, authenticated create/delete of own reviews
+    // Reviews
     match /reviews/{reviewId} {
       allow read: if true;
       allow create: if isAuth() && request.resource.data.authorId == request.auth.uid;
       allow update, delete: if isAdmin() || (isAuth() && resource.data.authorId == request.auth.uid);
     }
 
-    // Notifications collection: user can read their own notifications
-    match /notifications/{notificationId} {
+    // Notifications
+    match /notifications/{notifId} {
       allow create: if isAdmin() || isAuth();
       allow read, update, delete: if isAdmin() || (isAuth() && resource.data.userId == request.auth.uid);
     }
 
-    // Project stats collection: public read, admin write
-    match /projectStats/{projectId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // Typing indicators: authenticated access
-    match /typing/{typingId} {
-      allow read, write: if isAuth();
-    }
-
-    // Blocks collection: user can manage their own blocks
-    match /blocks/{blockId} {
-      allow read, write: if isAuth() && request.auth.uid == resource.data.blockerId;
-    }
-
-    // Admin-only collections
-    match /admin/{document=**} {
+    // Admin-only
+    match /admin/{doc=**} {
       allow read, write: if isAdmin();
     }
 
-    // Default: deny everything else
+    // Default deny
     match /{document=**} {
       allow read, write: if false;
     }

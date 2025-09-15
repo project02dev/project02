@@ -22,11 +22,16 @@ export class LikesService {
   async toggleLike(
     projectId: string,
     userId: string
-  ): Promise<{ success: boolean; isLiked: boolean; totalLikes: number; error?: string }> {
+  ): Promise<{
+    success: boolean;
+    isLiked: boolean;
+    totalLikes: number;
+    error?: string;
+  }> {
     try {
       // Check if user already liked this project
       const existingLike = await this.getUserLike(projectId, userId);
-      
+
       if (existingLike) {
         // Unlike the project
         await this.unlikeProject(projectId, userId, existingLike.id);
@@ -40,11 +45,11 @@ export class LikesService {
       }
     } catch (error) {
       console.error("Error toggling like:", error);
-      return { 
-        success: false, 
-        isLiked: false, 
-        totalLikes: 0, 
-        error: "Failed to toggle like" 
+      return {
+        success: false,
+        isLiked: false,
+        totalLikes: 0,
+        error: "Failed to toggle like",
       };
     }
   }
@@ -61,7 +66,7 @@ export class LikesService {
         createdAt: new Date(),
       };
 
-      const likeRef = doc(collection(db, "likes"));
+      const likeRef = doc(db, "projects", projectId, "likes", userId);
       batch.set(likeRef, likeData);
 
       // Update project likes count
@@ -73,11 +78,15 @@ export class LikesService {
 
       // Update project stats
       const statsRef = doc(db, "projectStats", projectId);
-      batch.set(statsRef, {
-        projectId,
-        totalLikes: increment(1),
-        lastUpdated: serverTimestamp(),
-      }, { merge: true });
+      batch.set(
+        statsRef,
+        {
+          projectId,
+          totalLikes: increment(1),
+          lastUpdated: serverTimestamp(),
+        },
+        { merge: true }
+      );
 
       await batch.commit();
 
@@ -90,12 +99,16 @@ export class LikesService {
   }
 
   // Unlike a project
-  private async unlikeProject(projectId: string, userId: string, likeId: string) {
+  private async unlikeProject(
+    projectId: string,
+    userId: string,
+    likeId: string
+  ) {
     const batch = writeBatch(db);
 
     try {
       // Remove like record
-      const likeRef = doc(db, "likes", likeId);
+      const likeRef = doc(db, "projects", projectId, "likes", userId);
       batch.delete(likeRef);
 
       // Update project likes count
@@ -120,7 +133,10 @@ export class LikesService {
   }
 
   // Check if user liked a project
-  async getUserLike(projectId: string, userId: string): Promise<ProjectLike | null> {
+  async getUserLike(
+    projectId: string,
+    userId: string
+  ): Promise<ProjectLike | null> {
     try {
       const q = query(
         collection(db, "likes"),
@@ -130,7 +146,7 @@ export class LikesService {
       );
 
       const snapshot = await getDocs(q);
-      
+
       if (snapshot.empty) {
         return null;
       }
@@ -183,7 +199,7 @@ export class LikesService {
       );
 
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
+      return snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate() || new Date(),
@@ -208,7 +224,7 @@ export class LikesService {
       );
 
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
+      return snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate() || new Date(),
@@ -235,11 +251,11 @@ export class LikesService {
       );
 
       const snapshot = await getDocs(q);
-      
+
       // Count likes per project
       const projectLikes: { [projectId: string]: number } = {};
-      
-      snapshot.docs.forEach(doc => {
+
+      snapshot.docs.forEach((doc) => {
         const data = doc.data();
         const projectId = data.projectId;
         projectLikes[projectId] = (projectLikes[projectId] || 0) + 1;
@@ -269,12 +285,12 @@ export class LikesService {
     );
 
     return onSnapshot(q, (snapshot) => {
-      const likes: ProjectLike[] = snapshot.docs.map(doc => ({
+      const likes: ProjectLike[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate() || new Date(),
       })) as ProjectLike[];
-      
+
       callback(likes);
     });
   }
@@ -287,7 +303,7 @@ export class LikesService {
       if (!projectDoc.exists()) return;
 
       const project = projectDoc.data();
-      
+
       // Don't notify if creator liked their own project
       if (project.creatorId === likerId) return;
 
@@ -302,7 +318,9 @@ export class LikesService {
         userId: project.creatorId,
         type: "like",
         title: "Someone liked your project!",
-        message: `${liker.fullName || "Someone"} liked your project "${project.title}".`,
+        message: `${liker.fullName || "Someone"} liked your project "${
+          project.title
+        }".`,
         data: {
           projectId,
           likerId,
@@ -329,10 +347,10 @@ export class LikesService {
         collection(db, "projects"),
         where("creatorId", "==", creatorId)
       );
-      
+
       const projectsSnapshot = await getDocs(projectsQuery);
-      const projectIds = projectsSnapshot.docs.map(doc => doc.id);
-      
+      const projectIds = projectsSnapshot.docs.map((doc) => doc.id);
+
       if (projectIds.length === 0) {
         return { totalLikes: 0, recentLikes: 0 };
       }
@@ -342,34 +360,37 @@ export class LikesService {
         collection(db, "likes"),
         where("projectId", "in", projectIds.slice(0, 10)) // Firestore limit
       );
-      
+
       const likesSnapshot = await getDocs(likesQuery);
-      
+
       // Calculate stats
       const totalLikes = likesSnapshot.size;
-      
+
       // Recent likes (last 7 days)
       const weekAgo = new Date();
       weekAgo.setDate(weekAgo.getDate() - 7);
-      
-      const recentLikes = likesSnapshot.docs.filter(doc => {
+
+      const recentLikes = likesSnapshot.docs.filter((doc) => {
         const likeDate = doc.data().createdAt?.toDate() || new Date(0);
         return likeDate >= weekAgo;
       }).length;
 
       // Find top liked project
       const projectLikeCounts: { [projectId: string]: number } = {};
-      likesSnapshot.docs.forEach(doc => {
+      likesSnapshot.docs.forEach((doc) => {
         const projectId = doc.data().projectId;
         projectLikeCounts[projectId] = (projectLikeCounts[projectId] || 0) + 1;
       });
 
       let topLikedProject;
       if (Object.keys(projectLikeCounts).length > 0) {
-        const topProjectId = Object.entries(projectLikeCounts)
-          .sort(([,a], [,b]) => b - a)[0][0];
-        
-        const topProject = projectsSnapshot.docs.find(doc => doc.id === topProjectId);
+        const topProjectId = Object.entries(projectLikeCounts).sort(
+          ([, a], [, b]) => b - a
+        )[0][0];
+
+        const topProject = projectsSnapshot.docs.find(
+          (doc) => doc.id === topProjectId
+        );
         if (topProject) {
           topLikedProject = {
             projectId: topProjectId,
