@@ -139,8 +139,7 @@ export class LikesService {
   ): Promise<ProjectLike | null> {
     try {
       const q = query(
-        collection(db, "likes"),
-        where("projectId", "==", projectId),
+        collection(db, "projects", projectId, "likes"),
         where("userId", "==", userId),
         limit(1)
       );
@@ -172,10 +171,7 @@ export class LikesService {
   // Get project likes count
   async getProjectLikesCount(projectId: string): Promise<number> {
     try {
-      const q = query(
-        collection(db, "likes"),
-        where("projectId", "==", projectId)
-      );
+      const q = query(collection(db, "projects", projectId, "likes"));
 
       const snapshot = await getDocs(q);
       return snapshot.size;
