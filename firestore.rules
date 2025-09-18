@@ -2,6 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // --- Helper functions ---
     function isAuth() {
       return request.auth != null;
     }
@@ -10,83 +11,81 @@ service cloud.firestore {
       return isAuth() && request.auth.token.admin == true;
     }
 
-    // Users collection
+    // --- Users collection ---
     match /users/{userId} {
+      // Any authenticated user can read user profiles
+      allow read: if isAuth();
+
+      // Only the authenticated user can create/update/delete their own user document
       allow create: if isAuth() && request.auth.uid == userId;
-      allow read, update, delete: if isAdmin() || (isAuth() && request.auth.uid == userId);
+      allow update, delete: if isAdmin() || (isAuth() && request.auth.uid == userId);
     }
 
-    // Projects collection
+    // --- Projects collection ---
     match /projects/{projectId} {
-      allow read: if true;
+      allow read: if isAuth();
       allow create: if isAuth() && request.resource.data.creatorId == request.auth.uid;
-      allow delete: if isAdmin() || (isAuth() && resource.data.creatorId == request.auth.uid);
-      allow update: if isAdmin() || (isAuth() && resource.data.creatorId == request.auth.uid);
-
-      // Allow any authenticated client to update only totalLikes and totalLikesUpdatedAt
-      allow update: if isAuth() &&
-        request.resource.data.keys().hasOnly(resource.data.keys().union(['totalLikes','totalLikesUpdatedAt'])) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['totalLikes','totalLikesUpdatedAt']) &&
-        request.resource.data.totalLikes is number;
+      allow update, delete: if isAdmin() || request.auth.uid == resource.data.creatorId;
 
       // Likes subcollection
       match /likes/{userId} {
-        allow read: if true;
-        allow create: if isAuth() && request.auth.uid == userId;
-        allow delete: if isAuth() && request.auth.uid == userId;
-        allow update: if false;
+        allow read: if isAuth();
+        allow create, delete: if isAuth() && request.auth.uid == userId;
       }
     }
 
-    // Orders collection
+    // --- Orders collection ---
     match /orders/{orderId} {
-      allow create: if isAuth() && (
-        request.resource.data.studentId == request.auth.uid ||
-        request.resource.data.creatorId == request.auth.uid
-      );
+      allow create: if isAuth() &&
+        (request.resource.data.studentId == request.auth.uid ||
+         request.resource.data.creatorId == request.auth.uid);
+
       allow read, update, delete: if isAdmin() || (
-        isAuth() && (
-          resource.data.studentId == request.auth.uid ||
-          resource.data.creatorId == request.auth.uid
-        )
+        isAuth() &&
+        (resource.data.studentId == request.auth.uid ||
+         resource.data.creatorId == request.auth.uid)
       );
     }
 
-    // Conversations and messages
+    // --- Conversations + messages ---
     match /conversations/{convId} {
-      allow read, write: if isAdmin() || (
-        isAuth() && request.auth.uid in resource.data.participants
-      );
+      allow create: if isAuth() &&
+        request.auth.uid in request.resource.data.participants;
+
+      allow read, update, delete: if isAdmin() ||
+        (isAuth() && request.auth.uid in resource.data.participants);
 
       match /messages/{msgId} {
-        allow create: if isAdmin() || (
-          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(convId)).data.participants
-        );
-        allow read, update, delete: if isAdmin() || (
-          isAuth() && request.auth.uid in get(/databases/$(database)/documents/conversations/$(convId)).data.participants
-        );
+        allow create: if isAdmin() ||
+          (isAuth() &&
+           request.auth.uid in get(/databases/$(database)/documents/conversations/$(convId)).data.participants &&
+           request.resource.data.senderId == request.auth.uid);
+
+        allow read, update, delete: if isAdmin() ||
+          (isAuth() &&
+           request.auth.uid in get(/databases/$(database)/documents/conversations/$(convId)).data.participants);
       }
     }
 
-    // Reviews
+    // --- Reviews collection ---
     match /reviews/{reviewId} {
-      allow read: if true;
+      allow read: if isAuth();
       allow create: if isAuth() && request.resource.data.authorId == request.auth.uid;
-      allow update, delete: if isAdmin() || (isAuth() && resource.data.authorId == request.auth.uid);
+      allow update, delete: if isAdmin() || request.auth.uid == resource.data.authorId;
     }
 
-    // Notifications
+    // --- Notifications collection ---
     match /notifications/{notifId} {
-      allow create: if isAdmin() || isAuth();
-      allow read, update, delete: if isAdmin() || (isAuth() && resource.data.userId == request.auth.uid);
+      allow create: if isAuth() && request.resource.data.userId == request.auth.uid;
+      allow read, update, delete: if isAdmin() || request.auth.uid == resource.data.userId;
     }
 
-    // Admin-only
+    // --- Admin-only collection ---
     match /admin/{doc=**} {
       allow read, write: if isAdmin();
     }
 
-    // Default deny
+    // --- Deny everything else ---
     match /{document=**} {
       allow read, write: if false;
     }

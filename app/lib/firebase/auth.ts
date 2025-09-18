@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { auth } from "./config";
+import { auth, db } from "./config";
 import {
   createUserWithEmailAndPassword,
   signInWithPopup,
@@ -13,6 +14,7 @@ import {
   User,
   browserLocalPersistence,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 interface AuthResponse {
   uid: any;
@@ -86,13 +88,28 @@ async function handleOAuthSignIn(
       throw new Error("No user data received");
     }
 
+    // Ensure user document exists at /users/{uid} (merge to avoid overwrites)
+    const isNewUser = (result as any)._tokenResponse?.isNewUser ?? false;
+    const providerId = provider.providerId;
+    const baseData: Record<string, unknown> = {
+      email: result.user.email,
+      displayName: result.user.displayName,
+      photoURL: result.user.photoURL,
+      provider: providerId,
+      updatedAt: new Date().toISOString(),
+    };
+    if (isNewUser) {
+      baseData.createdAt = new Date().toISOString();
+    }
+    await setDoc(doc(db, "users", result.user.uid), baseData, { merge: true });
+
     return {
       uid: result.user.uid,
       email: result.user.email,
       displayName: result.user.displayName,
       photoURL: result.user.photoURL,
       user: result.user,
-      isNewUser: (result as any)._tokenResponse?.isNewUser ?? false,
+      isNewUser,
     };
   } catch (error) {
     if (isAuthError(error) && error.code === "auth/popup-blocked") {
@@ -104,13 +121,30 @@ async function handleOAuthSignIn(
           throw new Error("Authentication failed");
         }
 
+        // Ensure user document exists at /users/{uid} (merge to avoid overwrites)
+        const isNewUser = (result as any)._tokenResponse?.isNewUser ?? false;
+        const providerId = provider.providerId;
+        const baseData: Record<string, unknown> = {
+          email: result.user.email,
+          displayName: result.user.displayName,
+          photoURL: result.user.photoURL,
+          provider: providerId,
+          updatedAt: new Date().toISOString(),
+        };
+        if (isNewUser) {
+          baseData.createdAt = new Date().toISOString();
+        }
+        await setDoc(doc(db, "users", result.user.uid), baseData, {
+          merge: true,
+        });
+
         return {
           uid: result.user.uid,
           email: result.user.email,
           displayName: result.user.displayName,
           photoURL: result.user.photoURL,
           user: result.user,
-          isNewUser: (result as any)._tokenResponse?.isNewUser ?? false,
+          isNewUser,
         };
       } catch (redirectError) {
         throw handleAuthError(redirectError);
