@@ -39,11 +39,13 @@ export default function MessagesPage() {
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
       <Header />
-      <div className="flex-1 overflow-hidden">
-        <MessageCenter
-          targetUserId={targetUserId ?? undefined}
-          isFullPage={true}
-        />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 w-full max-w-5xl mx-auto px-2 sm:px-4 py-2 sm:py-4">
+          <MessageCenter
+            targetUserId={targetUserId ?? undefined}
+            isFullPage={true}
+          />
+        </div>
       </div>
       <SystemStatus />
     </div>
