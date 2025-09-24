@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
@@ -10,6 +11,9 @@ import { StageAccount } from "@/components/front-pages/signup/StageAccount";
 import { StageProfile } from "@/components/front-pages/signup/StageProfile";
 import { StageVerification } from "@/components/front-pages/signup/StageVerification";
 import { signInWithGoogle, signInWithGithub } from "@/lib/firebase/auth";
+import { sendEmailVerification } from "firebase/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebase/config";
 
 interface FormData {
   university: any;
@@ -66,6 +70,7 @@ export default function SignupPage() {
       allowedFileTypes: string;
     }>
   >([]);
+  const [user, loading] = useAuthState(auth);
 
   useEffect(() => {
     const loadVerificationTypes = async () => {
@@ -125,6 +130,14 @@ export default function SignupPage() {
         toast.success("Account created successfully!");
       } else {
         toast.success(`Welcome back! Signed in with ${provider}`);
+      }
+
+      // Check if the user's email is verified
+      if (user && !user.emailVerified) {
+        await sendEmailVerification(user);
+        toast.info(
+          "A verification email has been sent. Please check your inbox."
+        );
       }
 
       // Use router.replace instead of push to prevent back navigation
@@ -206,6 +219,18 @@ export default function SignupPage() {
       }
 
       toast.success("Account created successfully!");
+
+      // Check if the user's email is verified
+      const user = userCredential.user;
+      if (user) {
+        if (!user.emailVerified) {
+          await sendEmailVerification(user);
+          toast.info(
+            "A verification email has been sent. Please check your inbox."
+          );
+        }
+      }
+
       router.push("/dashboard");
     } catch (error: any) {
       console.error("Signup Error:", error);
@@ -263,6 +288,27 @@ export default function SignupPage() {
       ),
     },
   ];
+
+  if (user && !user.emailVerified) {
+    // Show verify email message or redirect
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-xl font-bold mb-2">Verify Your Email</h2>
+        <p className="mb-4">
+          Please check your inbox and click the verification link.
+        </p>
+        <button
+          onClick={async () => {
+            await sendEmailVerification(user);
+            toast.info("Verification email resent!");
+          }}
+          className="px-4 py-2 bg-indigo-600 text-white rounded"
+        >
+          Resend Email
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-[#f8fafc] relative">

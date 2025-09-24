@@ -224,7 +224,11 @@ export default function DashboardPage() {
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-center">
                 <div className="w-20 h-20 rounded-full bg-indigo-600 flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  {userData.fullName.charAt(0).toUpperCase()}
+                  {(
+                    userData.fullName?.charAt(0) ||
+                    userData.email?.charAt(0) ||
+                    "U"
+                  ).toUpperCase()}
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-1">
                   {userData.fullName}

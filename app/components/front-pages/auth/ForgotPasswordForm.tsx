@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
@@ -6,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { SuccessMessage } from "./SuccessMessage";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase/config";
 
 export function ForgotPasswordForm() {
   const [email, setEmail] = useState("");
@@ -18,25 +22,20 @@ export function ForgotPasswordForm() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setSuccess(false);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // In a real app, you would call your API here
-      // const response = await fetch('/api/auth/forgot-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // });
-
-      // if (!response.ok) throw new Error(await response.text());
-
+      await sendPasswordResetEmail(auth, email);
       setSuccess(true);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to send reset link"
-      );
+    } catch (err: any) {
+      // Firebase returns error code "auth/user-not-found" if email doesn't exist
+      if (err.code === "auth/user-not-found") {
+        setError("No account found with that email address.");
+      } else if (err.code === "auth/invalid-email") {
+        setError("Please enter a valid email address.");
+      } else {
+        setError("Failed to send reset link. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -44,12 +43,43 @@ export function ForgotPasswordForm() {
 
   if (success) {
     return (
-      <SuccessMessage
-        title="Check your email"
-        message="We've sent a password reset link to your email address."
-        buttonText="Back to login"
-        onButtonClick={() => router.push("/login")}
-      />
+      <div className="w-full max-w-md mx-auto">
+        <div className="rounded-lg bg-green-50 p-6 border border-green-200 text-green-900 shadow text-left">
+          <div className="flex items-center mb-2">
+            <svg
+              className="h-5 w-5 text-green-500 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <circle cx="12" cy="12" r="10" fill="#22c55e" />
+              <path
+                stroke="#fff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12l2 2 4-4"
+              />
+            </svg>
+            <span className="font-semibold">Check your email</span>
+          </div>
+          <p className="mb-2">
+            We've sent a password reset link to{" "}
+            <span className="font-semibold">{email}</span>.
+          </p>
+          <p className="text-sm text-green-700 mb-2">
+            If you don't see it, please check your{" "}
+            <span className="font-semibold">Spam</span> or{" "}
+            <span className="font-semibold">Junk</span> folder.
+          </p>
+          <button
+            className="mt-2 text-indigo-700 hover:underline font-medium"
+            onClick={() => router.push("/login")}
+          >
+            Back to login
+          </button>
+        </div>
+      </div>
     );
   }
 

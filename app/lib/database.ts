@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { db } from "./firebase/config";
+import { db } from "@/lib/firebase/config";
 import {
   collection,
   doc,
@@ -1006,3 +1006,15 @@ export const messageService = {
     }
   },
 };
+
+// Featured Projects
+export async function getFeaturedProjects() {
+  const q = query(
+    collection(db, "projects"),
+    where("featured", "==", true),
+    orderBy("createdAt", "desc"),
+    limit(6)
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+}
