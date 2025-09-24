@@ -38,7 +38,6 @@ export default function HeroSection() {
     setIsVisible(true);
   }, []);
 
-  // Check if logged-in user's email is already subscribed
   useEffect(() => {
     if (user?.email) {
       setEmail(user.email);
@@ -46,7 +45,6 @@ export default function HeroSection() {
     }
   }, [user]);
 
-  // Check if email exists in subscribe collection
   const checkIfSubscribed = async (checkEmail: string) => {
     const q = query(
       collection(db, "subscribe"),
@@ -62,13 +60,11 @@ export default function HeroSection() {
     }
   };
 
-  // Subscribe handler
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setIsLoading(true);
     try {
-      // Check if already subscribed
       const q = query(collection(db, "subscribe"), where("email", "==", email));
       const snap = await getDocs(q);
       if (!snap.empty) {
@@ -93,7 +89,6 @@ export default function HeroSection() {
     }
   };
 
-  // Unsubscribe handler
   const handleUnsubscribe = async () => {
     if (!subscribeDocId) return;
     setIsLoading(true);
@@ -108,7 +103,6 @@ export default function HeroSection() {
     }
   };
 
-  // Simplified animation variants
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: {
@@ -147,21 +141,21 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-indigo-200/10 rounded-full blur-3xl"></div>
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-40 h-40 sm:w-72 sm:h-72 bg-blue-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-56 h-56 sm:w-96 sm:h-96 bg-purple-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/4 w-32 h-32 sm:w-64 sm:h-64 bg-indigo-200/10 rounded-full blur-3xl"></div>
       </div>
 
-      <div className="container mx-auto px-4 lg:px-8 py-20 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-20 relative z-10">
         <motion.div
           initial="hidden"
           animate={isVisible ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid lg:grid-cols-2 gap-16 items-center"
+          className="flex flex-col lg:grid lg:grid-cols-2 gap-10 lg:gap-16 items-center"
         >
           {/* Left Content */}
-          <div className="space-y-8">
+          <div className="w-full space-y-8">
             <motion.div variants={fadeInUp} className="space-y-6">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
@@ -170,7 +164,7 @@ export default function HeroSection() {
               </div>
 
               {/* Main Heading */}
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-gray-900 leading-tight">
                 Academic Projects
                 <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Made Brilliant
@@ -178,7 +172,7 @@ export default function HeroSection() {
               </h1>
 
               {/* Description */}
-              <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-xl text-gray-600 leading-relaxed max-w-2xl">
                 Fast, user-friendly, and engaging transform how academic
                 projects are created and managed. Connect with talented creators
                 and bring your ideas to life.
@@ -192,13 +186,13 @@ export default function HeroSection() {
             >
               <Link
                 href="/signup"
-                className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
               >
                 Start Your Project
                 <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
 
-              <button className="group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:border-blue-200 transition-all duration-300">
+              <button className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:border-blue-200 transition-all duration-300">
                 <HiPlay className="w-5 h-5 text-blue-600" />
                 Watch Demo
               </button>
@@ -206,21 +200,18 @@ export default function HeroSection() {
 
             {/* Email Input Section */}
             <motion.div
-              variants={{
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-              }}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-gray-100"
+              variants={fadeInUp}
+              className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100"
             >
               {subscribed ? (
-                <div className="flex items-center gap-4 bg-green-50 border border-green-200 rounded-xl p-6 text-green-900">
-                  <div className="flex-shrink-0">
+                <div className="flex flex-col sm:flex-row items-center gap-4 bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 text-green-900">
+                  <div className="flex-shrink-0 mb-2 sm:mb-0">
                     <div className="bg-green-600 rounded-full p-3 flex items-center justify-center">
                       <HiCheck className="w-7 h-7 text-white" />
                     </div>
                   </div>
                   <div>
-                    <div className="font-bold text-lg mb-1">
+                    <div className="font-bold text-base sm:text-lg mb-1">
                       Subscribed successfully!
                     </div>
                     <div className="mb-1">
@@ -247,14 +238,17 @@ export default function HeroSection() {
                 </div>
               ) : (
                 <>
-                  <p className="text-gray-600 mb-4 font-medium">
+                  <p className="text-gray-600 mb-4 font-medium text-sm sm:text-base">
                     Get all updates from us
                   </p>
-                  <form className="flex gap-3" onSubmit={handleSubscribe}>
+                  <form
+                    className="flex flex-col sm:flex-row gap-3"
+                    onSubmit={handleSubscribe}
+                  >
                     <input
                       type="email"
                       placeholder="Enter your email"
-                      className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -262,7 +256,7 @@ export default function HeroSection() {
                     />
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm"
                       disabled={isLoading}
                     >
                       {isLoading ? "Subscribing..." : "Stay connected"}
@@ -281,11 +275,11 @@ export default function HeroSection() {
             {/* Stats */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 gap-6 pt-6"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 pt-4 sm:pt-6"
             >
               {stats.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="flex items-center justify-center gap-2 text-2xl font-bold text-gray-900 mb-1">
+                  <div className="flex items-center justify-center gap-2 text-xl sm:text-2xl font-bold text-gray-900 mb-1">
                     {stat.icon}
                     {stat.value}
                   </div>
@@ -296,9 +290,9 @@ export default function HeroSection() {
           </div>
 
           {/* Right Visual */}
-          <motion.div variants={fadeInUp} className="relative">
+          <motion.div variants={fadeInUp} className="relative w-full">
             {/* Main Card */}
-            <div className="relative bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+            <div className="relative bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden w-full max-w-lg mx-auto">
               <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
                 <Image
                   src="/secondary.webp"
@@ -314,13 +308,15 @@ export default function HeroSection() {
               </div>
 
               {/* Card Footer */}
-              <div className="p-6 bg-gradient-to-r from-gray-50 to-white">
+              <div className="p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-white">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base">
                       Project02 Platform
                     </h4>
-                    <p className="text-sm text-gray-600">Live demo preview</p>
+                    <p className="text-xs sm:text-sm text-gray-600">
+                      Live demo preview
+                    </p>
                   </div>
                   <div className="flex items-center gap-1 text-amber-500">
                     <HiStar className="w-4 h-4 fill-current" />
@@ -331,29 +327,29 @@ export default function HeroSection() {
             </div>
 
             {/* Floating Testimonial Card */}
-            <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 border border-gray-100 max-w-xs">
+            <div className="absolute -bottom-6 left-0 sm:-left-6 bg-white rounded-2xl shadow-xl p-3 sm:p-4 border border-gray-100 max-w-xs w-5/6 sm:w-auto">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                   SC
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">
+                  <p className="font-semibold text-gray-900 text-sm">
                     Mr. Muhammed Olayemi
                   </p>
                   <p className="text-xs text-gray-500">Content Creator</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 italic">
+              <p className="text-xs sm:text-sm text-gray-600 italic">
                 &apos;Project02 transformed how I collaborate with students.
                 Incredible platform!&apos;
               </p>
             </div>
 
             {/* Floating Stats Card */}
-            <div className="absolute -top-6 -right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl shadow-xl p-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold">20k+</div>
-                <div className="text-sm opacity-90">Projects Completed</div>
+            <div className="absolute -top-6 right-0 sm:-right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl shadow-xl p-3 sm:p-4 w-32 text-center">
+              <div className="text-xl sm:text-2xl font-bold">20k+</div>
+              <div className="text-xs sm:text-sm opacity-90">
+                Projects Completed
               </div>
             </div>
           </motion.div>
