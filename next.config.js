@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+
+  // Image optimization config (your existing setup)
   images: {
     remotePatterns: [
       {
@@ -25,10 +27,25 @@ const nextConfig = {
       },
     ],
   },
+
+  // Webpack config (your existing fallback + new dev middleware tweaks)
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
+    };
+    return config;
+  },
+
+  // 🔹 Dev-only optimization to stop watching huge folders
+  webpackDevMiddleware: (config) => {
+    config.watchOptions = {
+      ignored: [
+        "**/node_modules/**",
+        "**/.next/**",
+        "**/.git/**",
+        "**/public/**",
+      ],
     };
     return config;
   },

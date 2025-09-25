@@ -14,8 +14,10 @@ import CreatorAnalytics from "@/components/dashboard/CreatorAnalytics";
 import ShareProfileLink from "@/components/dashboard/ShareProfileLink";
 import PaymentHistory from "@/components/dashboard/PaymentHistory";
 import EarningsManagement from "@/components/dashboard/EarningsManagement";
+import MyProjects from "@/components/dashboard/MyProjects";
 import WithdrawalManagement from "@/components/dashboard/WithdrawalManagement";
 import ClientOnly from "@/components/common/ClientOnly";
+import Image from "next/image";
 import {
   FiHome,
   FiShoppingBag,
@@ -27,6 +29,7 @@ import {
   FiSettings,
   FiLogOut,
   FiSearch,
+  FiFolder,
 } from "react-icons/fi";
 
 interface UserData {
@@ -79,6 +82,7 @@ export default function DashboardPage() {
         "analytics",
         "earnings",
         "withdrawals",
+        "projects",
       ].includes(tab)
     ) {
       setActiveTab(tab);
@@ -334,6 +338,7 @@ export default function DashboardPage() {
           { id: "analytics", label: "Analytics", icon: FiBarChart },
           { id: "earnings", label: "Earnings", icon: FiDollarSign },
           { id: "withdrawals", label: "Withdrawals", icon: FiDollarSign },
+          { id: "projects", label: "My projects", icon: FiFolder },
         ]
       : []),
   ].filter((tab) => tab.id !== undefined);
@@ -392,7 +397,20 @@ export default function DashboardPage() {
               {/* User Profile */}
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  {(userData.fullName?.charAt(0) || "U").toUpperCase()}
+                  {user.photoURL ? (
+                    <Image
+                      width={40}
+                      height={40}
+                      className="rounded-xl ring-2 ring-gray-100 group-hover:ring-blue-100 transition-all duration-200"
+                      src={user.photoURL}
+                      alt="User avatar"
+                      priority
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-semibold shadow-md group-hover:shadow-lg transition-all duration-200">
+                      {user.displayName?.charAt(0) || user.email?.charAt(0)}
+                    </div>
+                  )}
                 </div>
                 <h2 className="text-xl font-semibold text-gray-900 mb-1">
                   {userData.fullName}
@@ -548,6 +566,10 @@ export default function DashboardPage() {
 
                 {activeTab === "withdrawals" && userData.role === "creator" && (
                   <WithdrawalManagement />
+                )}
+
+                {activeTab === "projects" && userData.role === "creator" && (
+                  <MyProjects />
                 )}
               </div>
             </ClientOnly>
