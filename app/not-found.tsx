@@ -121,7 +121,7 @@ export default function NotFound() {
             <FiArrowRight className="w-4 h-4 text-gray-400 group-hover:text-orange-600 transition-colors" />
           </Link>
         </div>
-
+        {/* for repush */}
         {/* Support Text */}
         <p className="text-sm text-gray-500">
           {/*  */}
