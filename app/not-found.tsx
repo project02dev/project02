@@ -124,6 +124,7 @@ export default function NotFound() {
 
         {/* Support Text */}
         <p className="text-sm text-gray-500">
+          {/*  */}
           Still lost? Our support team is here to help.{" "}
           <Link
             href="/contact"
