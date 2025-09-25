@@ -3,7 +3,7 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import ProjectRatings from "@/components/project/ProjectRatings";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -594,7 +594,9 @@ Perfect for students learning machine learning, data science, or financial model
                   <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                     {formatPrice(project.price)}
                   </div>
-                  <p className="text-gray-600 text-xs sm:text-base">One-time purchase</p>
+                  <p className="text-gray-600 text-xs sm:text-base">
+                    One-time purchase
+                  </p>
                 </div>
                 <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                   <button
@@ -680,6 +682,10 @@ Perfect for students learning machine learning, data science, or financial model
                     </div>
                   </div>
                 </div>
+                <ProjectRatings
+                  projectId={project.id}
+                  creatorId={project.creatorId}
+                />
               </div>
             </div>
           </div>
