@@ -76,6 +76,22 @@ export default function Header() {
     },
   ];
 
+  // Profile navigation items (for mobile menu)
+  const profileNavItems: NavItem[] = [
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: <FiBarChart className="w-4 h-4" />,
+      requiresAuth: true,
+    },
+    {
+      href: "/profile",
+      label: "Profile Settings",
+      icon: <FiUser className="w-4 h-4" />,
+      requiresAuth: true,
+    },
+  ];
+
   useEffect(() => {
     setMounted(true);
 
@@ -372,6 +388,30 @@ export default function Header() {
                   )
               )}
             </div>
+
+            {/* Mobile Profile Navigation Items (for logged-in users) */}
+            {user && (
+              <div className="space-y-2 pt-2 border-t border-gray-200/60">
+                {profileNavItems.map(
+                  (item) =>
+                    shouldShowNavItem(item) && (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                          isActivePath(item.href)
+                            ? "text-blue-600 bg-blue-50/80 border border-blue-100"
+                            : "text-gray-600 hover:text-blue-600 hover:bg-gray-50/80"
+                        }`}
+                      >
+                        {item.icon}
+                        {item.label}
+                      </Link>
+                    )
+                )}
+              </div>
+            )}
 
             {/* Mobile Auth Section */}
             {!loading && !user && (
