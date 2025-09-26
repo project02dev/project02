@@ -28,7 +28,7 @@ const nextConfig = {
     ],
   },
 
-  // Webpack config (your existing fallback + new dev middleware tweaks)
+  // Webpack config (keep minimal and compatible with Turbopack)
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -37,17 +37,13 @@ const nextConfig = {
     return config;
   },
 
-  // 🔹 Dev-only optimization to stop watching huge folders
-  webpackDevMiddleware: (config) => {
-    config.watchOptions = {
-      ignored: [
-        "**/node_modules/**",
-        "**/.next/**",
-        "**/.git/**",
-        "**/public/**",
-      ],
-    };
-    return config;
+  // Turbopack configuration placeholder (optional)
+  // Note: Only used when running `next dev --turbo`
+  turbopack: {
+    // Example settings if needed later:
+    // resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.mjs', '.json'],
+    // resolveAlias: {},
+    // rules: {}
   },
 };
 
