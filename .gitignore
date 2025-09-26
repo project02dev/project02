@@ -10,9 +10,12 @@
 !.yarn/releases
 !.yarn/versions
 
+
 # testing
 /coverage
 
+package-lock.json
+bun.lockb
 # next.js
 /.next/
 /out/

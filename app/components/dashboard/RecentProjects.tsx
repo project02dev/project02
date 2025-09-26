@@ -71,7 +71,7 @@ export default function RecentProjects({ userId }: RecentProjectsProps) {
       <div className="bg-white rounded-lg shadow p-6">
         <h2 className="text-xl font-semibold mb-4">Recent Purchases</h2>
         <div className="flex items-center justify-center py-8">
-          <FiLoader className="w-6 h-6 animate-spin text-indigo-600" />
+          <FiLoader className="w-6 h-6 animate-spin text-green-600" />
           <span className="ml-2 text-gray-600">Loading your purchases...</span>
         </div>
       </div>
@@ -107,11 +107,11 @@ export default function RecentProjects({ userId }: RecentProjectsProps) {
       case "completed":
         return "text-green-600 bg-green-100";
       case "delivered":
-        return "text-blue-600 bg-blue-100";
+        return "text-green-700 bg-green-100";
       case "in_progress":
         return "text-orange-600 bg-orange-100";
       case "pending_review":
-        return "text-purple-600 bg-purple-100";
+        return "text-yellow-700 bg-yellow-100";
       default:
         return "text-gray-600 bg-gray-100";
     }
@@ -154,10 +154,10 @@ export default function RecentProjects({ userId }: RecentProjectsProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold">Recent Purchases</h2>
-        <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+        <h2 className="text-lg sm:text-xl font-semibold">Recent Purchases</h2>
+        <button className="text-green-700 hover:text-green-800 text-sm font-medium">
           View All
         </button>
       </div>
@@ -169,54 +169,54 @@ export default function RecentProjects({ userId }: RecentProjectsProps) {
 
           return (
             <div
-              key={project.id}
-              className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+              key={`${project.id}-${purchase.id || purchase.createdAt?.toString() || Math.random().toString(36).slice(2)}`}
+              className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 sm:mb-4 gap-3">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center mb-2">
-                    <h3 className="font-semibold text-gray-900 text-lg">
+                    <h3 className="font-semibold text-gray-900 text-base sm:text-lg truncate">
                       {project.title}
                     </h3>
-                    <span className="ml-2 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
+                    <span className="ml-2 px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded whitespace-nowrap">
                       {project.department}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-gray-600 mb-3 break-words">
                     {project.description}
                   </p>
 
-                  <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
-                    <div className="flex items-center">
-                      <FiUser className="w-4 h-4 mr-1" />
-                      {project.creatorName}
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-500 mb-3">
+                    <div className="flex items-center min-w-0">
+                      <FiUser className="w-4 h-4 mr-1 flex-shrink-0" />
+                      <span className="truncate">{project.creatorName}</span>
                     </div>
                     <div className="flex items-center">
                       <FiDollarSign className="w-4 h-4 mr-1" />${project.price}
                     </div>
                     <div className="flex items-center">
                       <FiClock className="w-4 h-4 mr-1" />
-                      Purchased: {purchase.createdAt.toLocaleDateString()}
+                      <span className="whitespace-nowrap">Purchased: {purchase.createdAt.toLocaleDateString()}</span>
                     </div>
                     <div className="flex items-center">
                       <FiDownload className="w-4 h-4 mr-1" />
-                      Downloads: {purchase.downloadCount}
+                      <span className="whitespace-nowrap">Downloads: {purchase.downloadCount}</span>
                     </div>
                   </div>
                 </div>
 
-                <span className="px-3 py-1 rounded-full text-xs font-medium text-green-600 bg-green-100">
+                <span className="px-3 py-1 rounded-full text-xs font-medium text-green-600 bg-green-100 self-start sm:self-auto">
                   Purchased
                 </span>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                <div className="flex items-center space-x-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-gray-100">
+                <div className="flex flex-wrap items-center gap-2">
                   {purchase.downloadUrl && (
                     <button
                       onClick={() => handleDownload(purchase)}
-                      className="flex items-center px-3 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors"
+                      className="flex items-center px-3 py-2 btn-primary text-sm rounded transition-colors"
                     >
                       <FiDownload className="w-4 h-4 mr-1" />
                       Download
@@ -226,7 +226,7 @@ export default function RecentProjects({ userId }: RecentProjectsProps) {
                   {project.previewUrl && (
                     <button
                       onClick={() => handlePreview(project)}
-                      className="flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                      className="flex items-center px-3 py-2 bg-white text-green-700 border border-green-200 hover:bg-green-50 text-sm rounded transition-colors"
                     >
                       <FiEye className="w-4 h-4 mr-1" />
                       Preview
@@ -235,12 +235,13 @@ export default function RecentProjects({ userId }: RecentProjectsProps) {
 
                   <button
                     onClick={() => handleContactCreator(project)}
-                    className="flex items-center px-3 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors"
+                    className="flex items-center px-3 py-2 bg-white text-green-700 border border-green-200 hover:bg-green-50 text-sm rounded transition-colors"
                   >
                     <FiMessageCircle className="w-4 h-4 mr-1" />
                     Contact Creator
                   </button>
                 </div>
+                <div className="hidden sm:block" />
               </div>
             </div>
           );

@@ -201,7 +201,7 @@ export default function CreatorsPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading creators...</p>
         </div>
       </div>
@@ -212,7 +212,7 @@ export default function CreatorsPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       {/* Page Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-white shadow-sm border-b border-green-100">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
@@ -244,7 +244,7 @@ export default function CreatorsPage() {
                 <h3 className="text-lg font-semibold">Filters</h3>
                 <button
                   onClick={resetFilters}
-                  className="text-sm text-indigo-600 hover:text-indigo-800"
+                  className="text-sm text-green-700 hover:text-green-800"
                 >
                   Reset
                 </button>
@@ -262,7 +262,7 @@ export default function CreatorsPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search creators..."
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus-green"
                   />
                 </div>
               </div>
@@ -279,7 +279,7 @@ export default function CreatorsPage() {
                         type="checkbox"
                         checked={filters.skills.includes(skill)}
                         onChange={() => toggleSkillFilter(skill)}
-                        className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                        className="rounded border-gray-300 text-green-700 focus:ring-green-500"
                       />
                       <span className="ml-2 text-sm text-gray-700">
                         {skill}
@@ -302,7 +302,7 @@ export default function CreatorsPage() {
                       rating: parseFloat(e.target.value),
                     }))
                   }
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus-green"
                 >
                   <option value="0">Any Rating</option>
                   <option value="4">4+ Stars</option>
@@ -326,7 +326,7 @@ export default function CreatorsPage() {
                     }))
                   }
                   placeholder="Enter location..."
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus-green"
                 />
               </div>
             </div>
@@ -338,7 +338,7 @@ export default function CreatorsPage() {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 mb-4 sm:mb-0"
+                className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-green-50 mb-4 sm:mb-0"
               >
                 <FiFilter className="w-4 h-4" />
                 Filters
@@ -356,7 +356,7 @@ export default function CreatorsPage() {
                       sortBy: e.target.value as any,
                     }))
                   }
-                  className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="border border-gray-300 rounded-md px-3 py-2 focus-green"
                 >
                   <option value="rating">Highest Rated</option>
                   <option value="projects">Most Projects</option>
@@ -366,7 +366,7 @@ export default function CreatorsPage() {
             </div>
 
             {/* Creators Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch">
               {filteredCreators.map((creator) => (
                 <CreatorCard key={creator.uid} creator={creator} />
               ))}
@@ -381,10 +381,10 @@ export default function CreatorsPage() {
                 <p className="text-gray-600 mb-4">
                   Try adjusting your filters or search terms.
                 </p>
-                {user && (
+                {!!user && (
                   <button
                     onClick={createTestCreator}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="px-4 py-2 btn-primary"
                   >
                     Create Test Creator (Debug)
                   </button>
@@ -403,7 +403,8 @@ function CreatorCard({ creator }: { creator: UserProfile }) {
   const [user] = useAuthState(auth);
 
   const handleMessageClick = () => {
-    if (user && creator.uid === user.uid) {
+    if (!user) return; // type guard for TS
+    if (creator.uid === user.uid) {
       alert("You cannot message yourself!");
       return;
     }
@@ -411,7 +412,7 @@ function CreatorCard({ creator }: { creator: UserProfile }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6">
+    <div className="bg-white rounded-lg shadow hover:shadow-md transition-shadow p-6 h-full flex flex-col">
       <div className="flex items-start gap-4">
         <div className="relative">
           <Image
@@ -429,7 +430,7 @@ function CreatorCard({ creator }: { creator: UserProfile }) {
         <div className="flex-1 min-w-0">
           <Link
             href={`/creators/${creator.uid}`}
-            className="text-lg font-semibold text-gray-900 hover:text-indigo-600 transition-colors"
+            className="text-lg font-semibold text-gray-900 hover:text-green-700 transition-colors"
           >
             {creator.fullName}
           </Link>
@@ -462,7 +463,7 @@ function CreatorCard({ creator }: { creator: UserProfile }) {
       </div>
 
       {creator.bio && (
-        <p className="text-gray-600 text-sm mt-3 line-clamp-2">{creator.bio}</p>
+        <p className="text-gray-600 text-sm mt-3 line-clamp-2 min-h-[40px]">{creator.bio}</p>
       )}
 
       {creator.skills && creator.skills.length > 0 && (
@@ -470,7 +471,7 @@ function CreatorCard({ creator }: { creator: UserProfile }) {
           {creator.skills.slice(0, 3).map((skill) => (
             <span
               key={skill}
-              className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-full"
+              className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full"
             >
               {skill}
             </span>
@@ -483,57 +484,59 @@ function CreatorCard({ creator }: { creator: UserProfile }) {
         </div>
       )}
 
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-        <div className="flex items-center gap-2">
-          {creator.website && (
-            <a
-              href={creator.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <FiGlobe className="w-4 h-4" />
-            </a>
-          )}
-          {creator.github && (
-            <a
-              href={creator.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <FiGithub className="w-4 h-4" />
-            </a>
-          )}
-          {creator.linkedin && (
-            <a
-              href={creator.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <FiLinkedin className="w-4 h-4" />
-            </a>
-          )}
-        </div>
+      <div className="mt-auto">
+        <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {creator.website && (
+              <a
+                href={creator.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FiGlobe className="w-4 h-4" />
+              </a>
+            )}
+            {creator.github && (
+              <a
+                href={creator.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FiGithub className="w-4 h-4" />
+              </a>
+            )}
+            {creator.linkedin && (
+              <a
+                href={creator.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <FiLinkedin className="w-4 h-4" />
+              </a>
+            )}
+          </div>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href={`/creators/${creator.uid}`}
-            className="px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 transition-colors flex items-center gap-1"
-          >
-            <FiExternalLink className="w-3 h-3" />
-            View
-          </Link>
-          {user && creator.uid !== user.uid && (
-            <button
-              onClick={handleMessageClick}
-              className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors flex items-center gap-1"
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/creators/${creator.uid}`}
+              className="px-5 py-3 text-sm border border-green-200 text-green-700 rounded-custom hover:bg-green-50 transition-colors flex items-center gap-2"
             >
-              <FiMessageCircle className="w-3 h-3" />
-              Message
-            </button>
-          )}
+              <FiExternalLink className="w-4 h-4" />
+              View
+            </Link>
+            {!!user && creator.uid !== user.uid && (
+              <button
+                onClick={handleMessageClick}
+                className="px-5 py-3 text-sm btn-primary flex items-center gap-2"
+              >
+                <FiMessageCircle className="w-4 h-4" />
+                Message
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

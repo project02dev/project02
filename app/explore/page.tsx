@@ -276,7 +276,7 @@ export default function ExplorePage() {
                   placeholder="Search projects, topics, or keywords..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                  className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
                 />
               </div>
             </div>
@@ -292,14 +292,14 @@ export default function ExplorePage() {
             >
               <div className="bg-white rounded-lg shadow p-6 sticky top-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold">Filters</h3>
-                  <button
-                    onClick={resetFilters}
-                    className="text-sm text-indigo-600 hover:text-indigo-800"
-                  >
-                    Reset
-                  </button>
-                </div>
+                                  <h3 className="text-lg font-semibold">Filters</h3>
+                                  <button
+                                    onClick={resetFilters}
+                                    className="text-sm text-green-700 hover:text-green-800"
+                                  >
+                                    Reset
+                                  </button>
+                                </div>
 
                 {/* Department Filter */}
                 <div className="mb-6">
@@ -311,7 +311,7 @@ export default function ExplorePage() {
                     onChange={(e) =>
                       setFilters({ ...filters, department: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-600 focus:border-transparent"
                   >
                     <option value="">All Departments</option>
                     {departments.map((dept) => (
@@ -356,7 +356,7 @@ export default function ExplorePage() {
                     onChange={(e) =>
                       setFilters({ ...filters, difficulty: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-600 focus:border-transparent"
                   >
                     <option value="">All Levels</option>
                     <option value="beginner">Beginner</option>
@@ -378,7 +378,7 @@ export default function ExplorePage() {
                         rating: parseFloat(e.target.value),
                       })
                     }
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-600 focus:border-transparent"
                   >
                     <option value="0">Any Rating</option>
                     <option value="4">4+ Stars</option>
@@ -393,17 +393,17 @@ export default function ExplorePage() {
               {/* Results Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
                 <div className="flex items-center gap-4 mb-4 sm:mb-0">
-                  <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                  >
-                    <FiFilter className="w-4 h-4" />
-                    Filters
-                  </button>
-                  <p className="text-gray-600">
-                    {filteredProjects.length} projects found
-                  </p>
-                </div>
+                                  <button
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                                  >
+                                    <FiFilter className="w-4 h-4 text-green-700" />
+                                    Filters
+                                  </button>
+                                  <p className="text-gray-600">
+                                    {filteredProjects.length} projects found
+                                  </p>
+                                </div>
 
                 <div className="flex items-center gap-4">
                   {/* Sort */}
@@ -412,7 +412,7 @@ export default function ExplorePage() {
                     onChange={(e) =>
                       setFilters({ ...filters, sortBy: e.target.value })
                     }
-                    className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    className="border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-green-600 focus:border-transparent"
                   >
                     <option value="newest">Newest First</option>
                     <option value="oldest">Oldest First</option>
@@ -424,27 +424,31 @@ export default function ExplorePage() {
 
                   {/* View Mode */}
                   <div className="flex border border-gray-300 rounded-md">
-                    <button
-                      onClick={() => setViewMode("grid")}
-                      className={`p-2 ${
-                        viewMode === "grid"
-                          ? "bg-indigo-600 text-white"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      <FiGrid className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setViewMode("list")}
-                      className={`p-2 ${
-                        viewMode === "list"
-                          ? "bg-indigo-600 text-white"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      <FiList className="w-4 h-4" />
-                    </button>
-                  </div>
+                                      <button
+                                        onClick={() => setViewMode("grid")}
+                                        className={`p-2 ${
+                                          viewMode === "grid"
+                                            ? "primary-green text-white"
+                                            : "text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                        aria-label="Grid view"
+                                        aria-pressed={viewMode === "grid"}
+                                      >
+                                        <FiGrid className="w-4 h-4" />
+                                      </button>
+                                      <button
+                                        onClick={() => setViewMode("list")}
+                                        className={`p-2 ${
+                                          viewMode === "list"
+                                            ? "primary-green text-white"
+                                            : "text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                        aria-label="List view"
+                                        aria-pressed={viewMode === "list"}
+                                      >
+                                        <FiList className="w-4 h-4" />
+                                      </button>
+                                    </div>
                 </div>
               </div>
 
@@ -456,7 +460,7 @@ export default function ExplorePage() {
                   </p>
                   <button
                     onClick={resetFilters}
-                    className="text-indigo-600 hover:text-indigo-800"
+                    className="text-green-700 hover:text-green-800"
                   >
                     Clear all filters
                   </button>

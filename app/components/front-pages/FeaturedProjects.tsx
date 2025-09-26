@@ -73,7 +73,7 @@ export default function FeaturedProjects() {
             </p>
           </div>
           <div className="flex justify-center">
-            <div className="w-8 h-8 animate-spin rounded-full border-2 border-indigo-600 border-t-transparent"></div>
+            <div className="w-8 h-8 animate-spin rounded-full border-2 primary-green border-t-transparent"></div>
           </div>
         </div>
       </section>
@@ -85,7 +85,7 @@ export default function FeaturedProjects() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-4">
             <HiSparkles className="w-4 h-4" />
             All Projects
           </div>
@@ -119,11 +119,11 @@ export default function FeaturedProjects() {
         {/* Error State */}
         {error && (
           <div className="text-center py-8">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+            <div className="bg-red-50 border border-red-200 rounded-custom p-6 max-w-md mx-auto">
               <p className="text-red-600 mb-4">{error}</p>
               <button
                 onClick={fetchProjects}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                className="px-4 py-2 bg-red-600 text-white rounded-custom hover:bg-red-700 transition-colors text-sm"
               >
                 Try Again
               </button>
@@ -146,17 +146,17 @@ export default function FeaturedProjects() {
             <div className="text-center">
               <Link
                 href="/explore"
-                className="inline-flex items-center gap-2 px-6 py-3 border border-indigo-600 text-indigo-600 rounded-md hover:bg-indigo-50 transition-colors font-medium"
+                className="inline-flex items-center gap-2 px-6 py-3 primary-green text-white rounded-custom font-medium"
               >
                 View All Projects
-                <HiArrowRight className="w-4 h-4" />
+                <HiArrowRight className="w-4 h-4 text-white" />
               </Link>
             </div>
           </>
         ) : (
           !error && (
             <div className="text-center py-12">
-              <div className="bg-white rounded-lg shadow-sm p-8 max-w-md mx-auto">
+              <div className="bg-glass rounded-custom p-8 max-w-md mx-auto">
                 <HiSparkles className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   No Projects Available
@@ -166,9 +166,10 @@ export default function FeaturedProjects() {
                 </p>
                 <Link
                   href="/explore"
-                  className="inline-flex items-center gap-2 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-2 primary-green text-white rounded-custom font-medium"
                 >
                   Browse All Projects
+                  <HiArrowRight className="w-4 h-4 text-white" />
                 </Link>
               </div>
             </div>

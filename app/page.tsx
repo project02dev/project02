@@ -5,8 +5,6 @@ import Footer from "@/components/Footer";
 import HeroSection from "@/components/front-pages/HeroSection";
 import FeaturedProjects from "@/components/front-pages/FeaturedProjects";
 import HowItWorks from "@/components/front-pages/HowItWorks";
-import Testimonials from "@/components/front-pages/Testimonials";
-import CallToAction from "@/components/front-pages/CallToAction";
 import CookieConsent from "@/components/front-pages/CookieConsent";
 
 export const metadata: Metadata = {
@@ -33,7 +31,6 @@ export default function Home() {
         <HeroSection />
         <FeaturedProjects />
         <HowItWorks />
-        <Testimonials />
       </main>
 
       <Footer />

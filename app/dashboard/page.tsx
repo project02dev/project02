@@ -183,7 +183,7 @@ export default function DashboardPage() {
           {error.retryable && (
             <button
               onClick={fetchUserData}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex-1 px-4 py-2 btn-primary transition-colors"
             >
               Try Again
             </button>
@@ -203,7 +203,7 @@ export default function DashboardPage() {
   const LoadingState = () => (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <div className="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-gray-600">Loading your dashboard...</p>
       </div>
     </div>
@@ -211,12 +211,12 @@ export default function DashboardPage() {
 
   // Role selection component
   const RoleSelection = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
       <Header />
       <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 primary-green rounded-2xl flex items-center justify-center mx-auto mb-4">
               <FiUser className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -231,7 +231,7 @@ export default function DashboardPage() {
             <button
               onClick={() => handleRoleSelection("student")}
               disabled={isSubmitting}
-              className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 text-left disabled:opacity-50"
+              className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-green-600 hover:bg-green-50 transition-all duration-200 text-left disabled:opacity-50"
             >
               <div className="font-semibold text-gray-900 text-lg mb-1">
                 🎓 Student
@@ -244,7 +244,7 @@ export default function DashboardPage() {
             <button
               onClick={() => handleRoleSelection("creator")}
               disabled={isSubmitting}
-              className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-purple-500 hover:bg-purple-50 transition-all duration-200 text-left disabled:opacity-50"
+              className="w-full p-6 border-2 border-gray-200 rounded-xl hover:border-green-600 hover:bg-green-50 transition-all duration-200 text-left disabled:opacity-50"
             >
               <div className="font-semibold text-gray-900 text-lg mb-1">
                 💼 Creator
@@ -257,7 +257,7 @@ export default function DashboardPage() {
 
           {isSubmitting && (
             <div className="mt-4 text-center">
-              <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+              <div className="w-5 h-5 border-2 border-green-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
             </div>
           )}
         </div>
@@ -276,20 +276,58 @@ export default function DashboardPage() {
         <div className="p-6 border-b border-gray-200">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold">Menu</h2>
-            <button onClick={() => setMobileMenuOpen(false)} className="p-2">
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2" aria-label="Close menu">
               <FiX className="w-5 h-5" />
             </button>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-              {(userData?.fullName?.charAt(0) || "U").toUpperCase()}
+          {/* Mobile sidebar profile mirrors desktop info */}
+          {userData && (
+            <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg overflow-hidden ring-2 ring-gray-100 flex-shrink-0">
+                  {!!user?.photoURL ? (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={user.photoURL as string}
+                        alt="User avatar"
+                        fill
+                        sizes="40px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-full primary-green flex items-center justify-center text-white font-semibold">
+                      {(userData.fullName?.charAt(0) || "U").toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-medium text-sm truncate">{userData.fullName}</div>
+                  <div className="text-xs text-gray-600 truncate">{userData.email}</div>
+                  <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-medium bg-green-50 text-green-700">
+                    {userData.role === "creator" ? "Creator" : "Student"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                <div className="p-2 rounded-lg bg-white border border-gray-100">
+                  <div className="text-gray-500">Member since</div>
+                  <div className="font-medium text-gray-900">
+                    {(() => {
+                      const d = new Date(userData.createdAt);
+                      return isNaN(d.getTime()) ? "—" : d.toLocaleDateString();
+                    })()}
+                  </div>
+                </div>
+                <div className="p-2 rounded-lg bg-white border border-gray-100">
+                  <div className="text-gray-500">Completed Projects</div>
+                  <div className="font-medium text-gray-900">{userData.completedProjects || 0}</div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="font-medium text-sm">{userData?.fullName}</div>
-              <div className="text-xs text-gray-600">{userData?.role}</div>
-            </div>
-          </div>
+          )}
         </div>
 
         <nav className="p-4 space-y-2">
@@ -302,7 +340,7 @@ export default function DashboardPage() {
               }}
               className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors ${
                 activeTab === tab.id
-                  ? "bg-blue-50 text-blue-600"
+                  ? "bg-green-50 text-green-700 border border-green-200"
                   : "text-gray-600 hover:bg-gray-50"
               }`}
             >
@@ -354,7 +392,7 @@ export default function DashboardPage() {
   if (!userData) return <LoadingState />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
       <Header />
 
       {/* Mobile Header */}
@@ -363,6 +401,7 @@ export default function DashboardPage() {
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label="Open menu"
           >
             <FiMenu className="w-6 h-6" />
           </button>
@@ -377,7 +416,7 @@ export default function DashboardPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-shrink-0 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   activeTab === tab.id
-                    ? "bg-blue-600 text-white"
+                    ? "primary-green text-white"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
@@ -393,22 +432,24 @@ export default function DashboardPage() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar - Desktop */}
           <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sticky top-6 overflow-hidden">
               {/* User Profile */}
               <div className="text-center mb-6">
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                  {user.photoURL ? (
-                    <Image
-                      width={40}
-                      height={40}
-                      className="rounded-xl ring-2 ring-gray-100 group-hover:ring-blue-100 transition-all duration-200"
-                      src={user.photoURL}
-                      alt="User avatar"
-                      priority
-                    />
+                <div className="w-20 h-20 rounded-2xl overflow-hidden mx-auto mb-4 ring-2 ring-gray-100">
+                  {!!user?.photoURL ? (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={user.photoURL as string}
+                        alt="User avatar"
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
                   ) : (
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-semibold shadow-md group-hover:shadow-lg transition-all duration-200">
-                      {user.displayName?.charAt(0) || user.email?.charAt(0)}
+                    <div className="w-full h-full primary-green flex items-center justify-center text-white text-2xl font-bold">
+                      {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
                     </div>
                   )}
                 </div>
@@ -419,8 +460,8 @@ export default function DashboardPage() {
                 <span
                   className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
                     userData.role === "creator"
-                      ? "bg-purple-100 text-purple-800"
-                      : "bg-blue-100 text-blue-800"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-green-50 text-green-700"
                   }`}
                 >
                   {userData.role === "creator" ? "Creator" : "Student"}
@@ -432,7 +473,11 @@ export default function DashboardPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Member since</span>
                   <span className="font-medium">
-                    {new Date(userData.createdAt).toLocaleDateString()}
+                    {(() => {
+                      const date = new Date(userData.createdAt);
+                      const isValid = !isNaN(date.getTime());
+                      return isValid ? date.toLocaleDateString() : "—";
+                    })()}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
@@ -467,7 +512,7 @@ export default function DashboardPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors ${
                       activeTab === tab.id
-                        ? "bg-blue-50 text-blue-600 border border-blue-200"
+                        ? "bg-green-50 text-green-700 border border-green-200"
                         : "text-gray-600 hover:bg-gray-50"
                     }`}
                   >
@@ -490,7 +535,7 @@ export default function DashboardPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-6 py-4 border-b-2 font-medium transition-colors ${
                       activeTab === tab.id
-                        ? "border-blue-500 text-blue-600"
+                        ? "border-green-600 text-green-700"
                         : "border-transparent text-gray-500 hover:text-gray-700"
                     }`}
                   >

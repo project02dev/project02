@@ -225,10 +225,10 @@ export default function MessageBubble({
     switch (message.type) {
       case "audio":
         return (
-          <div className="flex items-center gap-3 bg-gray-100 rounded-lg p-3 max-w-xs">
+          <div className="flex items-center gap-3 bg-green-50 rounded-lg p-3 max-w-xs">
             <button
               onClick={handlePlayPause}
-              className="flex-shrink-0 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center hover:bg-indigo-700 transition-colors"
+              className="flex-shrink-0 w-8 h-8 primary-green text-white rounded-full flex items-center justify-center transition-colors"
             >
               {isPlaying ? (
                 <FiPause className="w-4 h-4" />
@@ -239,9 +239,9 @@ export default function MessageBubble({
 
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <div className="flex-1 h-1 bg-gray-300 rounded-full overflow-hidden">
+                <div className="flex-1 h-1 bg-green-100 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-indigo-600 transition-all duration-100"
+                    className="h-full primary-green transition-all duration-100"
                     style={{
                       width:
                         audioDuration > 0
@@ -266,13 +266,13 @@ export default function MessageBubble({
         return (
           <div>
             {replyToMessage && (
-              <div className="bg-gray-100 border-l-4 border-indigo-500 p-2 mb-2 rounded">
-                <p className="text-xs text-gray-600 mb-1">Replying to:</p>
-                <p className="text-sm text-gray-800">
-                  {replyToMessage.content.substring(0, 100)}
-                  {replyToMessage.content.length > 100 ? "..." : ""}
-                </p>
-              </div>
+              <div className="bg-green-50 border-l-4 border-green-600 p-2 mb-2 rounded">
+                        <p className="text-xs text-green-700 mb-1">Replying to:</p>
+                        <p className="text-sm text-gray-800">
+                          {replyToMessage.content.substring(0, 100)}
+                          {replyToMessage.content.length > 100 ? "..." : ""}
+                        </p>
+                      </div>
             )}
 
             {isEditing ? (
@@ -280,7 +280,7 @@ export default function MessageBubble({
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
-                  className="w-full p-3 bg-white text-gray-900 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                  className="w-full p-3 bg-white text-gray-900 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-green-600 focus:border-transparent shadow-sm"
                   rows={2}
                   autoFocus
                   placeholder="Edit your message..."
@@ -288,7 +288,7 @@ export default function MessageBubble({
                 <div className="flex gap-2">
                   <button
                     onClick={handleEdit}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 primary-green text-white text-sm rounded-lg transition-colors"
                   >
                     <FiCheck className="w-3 h-3" />
                     Save
@@ -362,12 +362,12 @@ export default function MessageBubble({
         onMouseUp={handleMouseUp}
       >
         <div
-          className={`relative px-4 py-2 rounded-lg ${
-            isOwn ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-900"
-          }`}
-          onMouseEnter={() => setShowActions(true)}
-          onMouseLeave={() => setShowActions(false)}
-        >
+            className={`relative px-4 py-2 rounded-lg ${
+              isOwn ? "primary-green text-white" : "bg-white text-gray-900 border border-gray-200"
+            }`}
+            onMouseEnter={() => setShowActions(true)}
+            onMouseLeave={() => setShowActions(false)}
+          >
           {renderMessageContent()}
 
           {/* Message Actions */}

@@ -196,7 +196,7 @@ export default function MessageInput({
         {/* Image Upload Button */}
         <button
           onClick={handleImageUpload}
-          className="p-2.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-xl transition-colors"
+          className="p-2.5 text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded-xl transition-colors"
           title="Upload image"
         >
           <FiImage className="w-5 h-5" />
@@ -205,14 +205,14 @@ export default function MessageInput({
         {/* File Attachment Button */}
         <button
           onClick={handleFileUpload}
-          className="p-2.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-xl transition-colors"
+          className="p-2.5 text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded-xl transition-colors"
           title="Attach file"
         >
           <FiPaperclip className="w-5 h-5" />
         </button>
 
         {/* Text Input Container */}
-        <div className="flex-1 relative bg-gray-50 rounded-2xl border border-gray-200 focus-within:border-blue-500 transition-colors">
+        <div className="flex-1 relative bg-gray-50 rounded-2xl border border-gray-200 focus-within:border-green-600 transition-colors">
           <textarea
             ref={textareaRef}
             value={message}
@@ -229,7 +229,7 @@ export default function MessageInput({
         {/* Emoji Button */}
         <button
           onClick={onToggleEmoji}
-          className="p-2.5 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-xl transition-colors"
+          className="p-2.5 text-gray-500 hover:text-green-700 hover:bg-gray-100 rounded-xl transition-colors"
           title="Add emoji"
         >
           <FiSmile className="w-5 h-5" />
@@ -240,7 +240,7 @@ export default function MessageInput({
           <button
             onClick={handleSend}
             disabled={disabled}
-            className="bg-blue-600 text-white p-2.5 rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"
+            className="btn-primary p-2.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
             title="Send message"
           >
             <FiSend className="w-5 h-5" />
@@ -251,7 +251,7 @@ export default function MessageInput({
             className={`p-2.5 rounded-xl transition-colors ${
               isRecording
                 ? "bg-red-600 text-white hover:bg-red-700 shadow-lg"
-                : "text-gray-500 hover:text-blue-600 hover:bg-gray-100"
+                : "text-gray-500 hover:text-green-700 hover:bg-gray-100"
             }`}
             title={isRecording ? "Stop recording" : "Record voice message"}
           >

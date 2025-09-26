@@ -47,6 +47,67 @@
   .animation-delay-2000 {
     animation-delay: 2s;
   }
+
+  /* Theme System - Custom Colors and Styles */
+  /* Primary green color for buttons and accents */
+  .primary-green {
+    background-color: #1e5724;
+  }
+
+  .primary-green-hover {
+    background-color: #1e5724;
+  }
+
+  .primary-green-hover:hover {
+    background-color: #166534; /* Darker green for hover */
+  }
+
+  /* Text colors */
+  .text-black {
+    color: #111827; /* Equivalent to text-gray-900 */
+  }
+
+  .text-gray-dark {
+    color: #374151; /* Equivalent to text-gray-700 */
+  }
+
+  /* Custom rounded corners */
+  .rounded-custom {
+    border-radius: 0.375rem; /* 6px, equivalent to rounded-md */
+  }
+
+  /* Glassmorphism background */
+  .bg-glass {
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+  }
+
+  .bg-glass-mobile {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply primary-green text-white rounded-custom font-medium transition-all duration-200;
+  }
+
+  .btn-primary:hover {
+    @apply primary-green-hover;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black border border-gray-200 rounded-custom font-medium transition-all duration-200;
+  }
+
+  .btn-secondary:hover {
+    @apply hover:border-green-200;
+  }
+
+  /* Focus ring for inputs */
+  .focus-green {
+    @apply focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent;
+  }
 }
 
 /* Phone Input Custom Styles */

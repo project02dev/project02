@@ -157,8 +157,8 @@ export default function Header() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-xl border-b border-gray-200/60 shadow-lg"
-          : "bg-white/90 backdrop-blur-md border-b border-gray-100/50"
+          ? "bg-gray-100/80 backdrop-blur-xl border-b border-gray-200/60 rounded-b-lg"
+          : "bg-gray-50/85 backdrop-blur-md border-b border-gray-100/50"
       }`}
     >
       <div className="container flex items-center justify-between px-4 lg:px-6 mx-auto">
@@ -172,7 +172,7 @@ export default function Header() {
             <Image src={"/favicon.png"} alt="po2" width={50} height={50} />
           </div>
           <div className="hidden sm:block">
-            <div className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <div className="text-xl font-bold text-gray-900">
               PROJECT02
             </div>
             <div className="text-xs text-gray-500 -mt-1 font-medium">
@@ -189,12 +189,12 @@ export default function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-all duration-200 ${
                     item.isCta
-                      ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-purple-700 transform hover:-translate-y-0.5"
+                      ? "btn-primary"
                       : isActivePath(item.href)
-                      ? "text-blue-600 bg-blue-50/80 border border-blue-100"
-                      : "text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 border border-transparent"
+                      ? "text-green-700 bg-green-100/90 border border-green-200 px-5 py-2.5 rounded-md"
+                      : "text-black hover:text-green-400 hover:bg-gray-50/80 border border-transparent rounded-custom"
                   }`}
                 >
                   {item.icon}
@@ -215,7 +215,7 @@ export default function Header() {
               <NotificationCenter />
 
               <Menu as="div" className="relative">
-                <Menu.Button className="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-50/80 transition-all duration-200 group border border-transparent hover:border-gray-200">
+                <Menu.Button className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50/80 transition-all duration-200 group border border-transparent hover:border-green-200 bg-white/90">
                   <div className="relative">
                     {user.photoURL ? (
                       <Image
@@ -227,11 +227,11 @@ export default function Header() {
                         priority
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-semibold shadow-md group-hover:shadow-lg transition-all duration-200">
+                      <div className="w-10 h-10 rounded-md bg-[#1e5724] flex items-center justify-center text-white font-semibold transition-all duration-200">
                         {user.displayName?.charAt(0) || user.email?.charAt(0)}
                       </div>
                     )}
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white shadow-sm"></div>
+                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
                   </div>
                   <div className="text-left">
                     <div className="text-sm font-medium text-gray-900">
@@ -254,7 +254,7 @@ export default function Header() {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-2xl bg-white/95 backdrop-blur-xl py-3 shadow-xl ring-1 ring-gray-200/50 border border-gray-100 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-10 mt-2 w-64 origin-top-right rounded-lg bg-white/90 backdrop-blur-xl py-3 ring-1 ring-gray-200/50 border border-gray-100/50 focus:outline-none">
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-sm font-semibold text-gray-900 truncate">
                         {user.displayName || user.email?.split("@")[0]}
@@ -269,10 +269,10 @@ export default function Header() {
                         {({ active }) => (
                           <Link
                             href="/dashboard"
-                            className={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                            className={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 rounded-md ${
                               active
-                                ? "bg-blue-50/80 text-blue-600"
-                                : "text-gray-700"
+                                ? "bg-green-50/90 text-green-500"
+                                : "text-gray-700 hover:bg-gray-50/80"
                             }`}
                           >
                             <FiBarChart className="w-4 h-4 mr-3" />
@@ -284,10 +284,10 @@ export default function Header() {
                         {({ active }) => (
                           <Link
                             href="/profile"
-                            className={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                            className={`flex items-center px-4 py-3 text-sm font-medium transition-all duration-200 rounded-md ${
                               active
-                                ? "bg-blue-50/80 text-blue-600"
-                                : "text-gray-700"
+                                ? "bg-green-50/90 text-green-500"
+                                : "text-gray-700 hover:bg-gray-50/80"
                             }`}
                           >
                             <FiUser className="w-4 h-4 mr-3" />
@@ -322,13 +322,13 @@ export default function Header() {
             <div className="flex items-center space-x-3">
               <Link
                 href="/login"
-                className="px-5 py-2.5 text-gray-600 hover:text-blue-600 font-medium transition-all duration-200 hover:bg-gray-50/80 rounded-xl"
+                className="px-5 py-2.5 text-black hover:text-green-400 font-medium transition-all duration-200 hover:bg-gray-50/80 rounded-custom border border-transparent hover:border-green-200"
               >
                 Log In
               </Link>
               <Link
                 href="/signup"
-                className="px-6 py-2.5 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl font-medium shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
+                className="px-6 py-2.5 text-white btn-primary hover:scale-105"
               >
                 Sign Up
               </Link>
@@ -341,7 +341,7 @@ export default function Header() {
           {user && <NotificationCenter />}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2.5 rounded-xl text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 transition-all duration-200 border border-transparent hover:border-gray-200"
+            className="p-2.5 rounded-custom text-black hover:text-green-400 hover:bg-gray-50/80 transition-all duration-200 border border-transparent hover:border-green-200"
           >
             {mobileMenuOpen ? (
               <FiX className="w-5 h-5" />
@@ -363,7 +363,7 @@ export default function Header() {
         leaveFrom="transform opacity-100 translate-y-0"
         leaveTo="transform opacity-0 -translate-y-4"
       >
-        <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200/60 shadow-xl">
+        <div className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200/60 rounded-b-lg">
           <div className="container px-4 py-6 mx-auto space-y-3">
             {/* Mobile Navigation Items */}
             <div className="space-y-2">
@@ -374,12 +374,12 @@ export default function Header() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                      className={`flex items-center gap-3 px-4 py-3 rounded-md font-medium transition-all duration-200 ${
                         item.isCta
-                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                          ? "bg-[#1e5724] text-white hover:bg-green-500 rounded-md"
                           : isActivePath(item.href)
-                          ? "text-blue-600 bg-blue-50/80 border border-blue-100"
-                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50/80"
+                          ? "text-green-700 bg-green-100/90 border border-green-200 px-5 py-2.5 rounded-md"
+                          : "text-black hover:text-green-400 hover:bg-gray-50/80 rounded-custom"
                       }`}
                     >
                       {item.icon}
@@ -399,10 +399,10 @@ export default function Header() {
                         key={item.href}
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+                        className={`flex items-center gap-3 px-4 py-3 rounded-md font-medium transition-all duration-200 ${
                           isActivePath(item.href)
-                            ? "text-blue-600 bg-blue-50/80 border border-blue-100"
-                            : "text-gray-600 hover:text-blue-600 hover:bg-gray-50/80"
+                            ? "text-green-700 bg-green-100/90 border border-green-200 px-5 py-2.5 rounded-md"
+                            : "text-black hover:text-green-400 hover:bg-gray-50/80 rounded-custom"
                         }`}
                       >
                         {item.icon}
@@ -419,14 +419,14 @@ export default function Header() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-gray-600 hover:text-blue-600 hover:bg-gray-50/80 rounded-xl font-medium text-center transition-all duration-200"
+                  className="block px-4 py-3 text-black hover:text-green-400 hover:bg-gray-50/80 rounded-custom font-medium text-center transition-all duration-200 border border-transparent hover:border-green-200"
                 >
                   Log In
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-xl font-medium text-center shadow-lg transition-all duration-200"
+                  className="block px-4 py-3 text-white btn-primary font-medium text-center transition-all duration-200"
                 >
                   Sign Up
                 </Link>
@@ -444,7 +444,7 @@ export default function Header() {
                 </div>
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 text-red-600 hover:bg-red-50/80 rounded-xl font-medium transition-all duration-200"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 text-red-600 hover:bg-red-50/80 rounded-md font-medium transition-all duration-200 border border-transparent hover:border-red-200"
                 >
                   <FiLogOut className="w-4 h-4" />
                   Sign Out

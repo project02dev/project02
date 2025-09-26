@@ -20,15 +20,15 @@ import Header from "@/components/Header";
 function getNotificationIcon(type: string) {
   switch (type) {
     case "message":
-      return <FiMessageCircle className="w-5 h-5 text-blue-600" />;
+      return <FiMessageCircle className="w-5 h-5 text-green-700" />;
     case "order":
-      return <FiShoppingBag className="w-5 h-5 text-green-600" />;
+      return <FiShoppingBag className="w-5 h-5 text-green-700" />;
     case "review":
-      return <FiStar className="w-5 h-5 text-yellow-600" />;
+      return <FiStar className="w-5 h-5 text-green-700" />;
     case "project_update":
-      return <FiInfo className="w-5 h-5 text-purple-600" />;
+      return <FiInfo className="w-5 h-5 text-green-700" />;
     default:
-      return <FiBell className="w-5 h-5 text-gray-600" />;
+      return <FiBell className="w-5 h-5 text-green-700" />;
   }
 }
 
@@ -93,10 +93,13 @@ export default function NotificationsPage() {
   return (
     <div>
       <Header />
-      <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-6">Your Notifications</h1>
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-2xl font-bold mb-6 text-gray-900">Your Notifications</h1>
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Loading...</div>
+          <div className="text-center py-12 text-gray-500">
+            <div className="w-10 h-10 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+            Loading...
+          </div>
         ) : notifications.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             <FiBell className="w-10 h-10 mx-auto mb-2 text-gray-300" />
@@ -109,25 +112,25 @@ export default function NotificationsPage() {
                 key={notification.id}
                 className={`flex items-start gap-4 p-4 rounded-lg border ${
                   !notification.read
-                    ? "bg-blue-50 border-blue-200"
+                    ? "bg-green-50 border-green-200"
                     : "bg-white border-gray-200"
                 }`}
               >
-                <div>{getNotificationIcon(notification.type)}</div>
-                <div className="flex-1">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-semibold text-gray-900">
+                <div className="flex-shrink-0">{getNotificationIcon(notification.type)}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-3">
+                    <h2 className="font-semibold text-gray-900 truncate">
                       {notification.title}
                     </h2>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-gray-400 flex-shrink-0">
                       {formatTimeAgo(notification.createdAt)}
                     </span>
                   </div>
-                  <p className="text-gray-700 mt-1">{notification.message}</p>
+                  <p className="text-gray-700 mt-1 break-words">{notification.message}</p>
                   {notification.data?.actionUrl && (
                     <Link
                       href={notification.data.actionUrl}
-                      className="inline-block mt-2 text-xs text-blue-600 hover:text-blue-800"
+                      className="inline-block mt-2 text-xs text-green-700 hover:text-green-800"
                     >
                       View Details →
                     </Link>
@@ -137,7 +140,7 @@ export default function NotificationsPage() {
                   {!notification.read && (
                     <button
                       onClick={() => handleMarkAsRead(notification.id)}
-                      className="p-1 text-gray-400 hover:text-green-600"
+                      className="p-1 text-gray-400 hover:text-green-700"
                       title="Mark as read"
                     >
                       <FiCheck className="w-4 h-4" />

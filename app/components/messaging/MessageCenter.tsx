@@ -131,27 +131,16 @@ export default function MessageCenter({
     // Full-page mode for dedicated messages page
     return (
       <div className={`h-full flex flex-col bg-white ${className}`}>
-        {/* Modern Header */}
-        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
-            {selectedConversation && (
-              <button
-                onClick={handleBackToList}
-                className="md:hidden p-2 text-gray-600 hover:text-gray-800 rounded-lg hover:bg-gray-100"
-              >
-                ← Back
-              </button>
-            )}
-          </div>
-        </div>
+        {/* Header - fixed height, non-scrolling */}
+        <div className="shrink-0 bg-white border-b border-gray-100 p-4"></div>
 
-        <div className="flex-1 flex overflow-hidden">
+        {/* Body must own the only scroll; lock container height */}
+        <div className="min-h-0 flex-1 flex overflow-hidden">
           {/* Sidebar - Always visible on desktop, toggleable on mobile */}
           <div
             className={`${
               selectedConversation ? "hidden md:block" : "block"
-            } w-full md:w-80 bg-white border-r border-gray-200`}
+            } w-full md:w-80 bg-white border-r border-gray-100 overflow-y-auto`}
           >
             <ConversationList
               conversations={conversations}
@@ -162,21 +151,21 @@ export default function MessageCenter({
             />
           </div>
 
-          {/* Chat Area */}
+          {/* Chat Area owns scroll inside ChatWindow */}
           <div
             className={`${
               selectedConversation ? "block" : "hidden md:block"
-            } flex-1 flex flex-col`}
+            } flex-1 min-w-0 flex flex-col overflow-hidden`}
           >
             {selectedConversation ? (
               <ChatWindow
                 conversationId={selectedConversation}
                 onBack={handleBackToList}
                 onNewMessage={handleNewMessage}
-                className="flex-1"
+                className="flex-1 min-h-0"
               />
             ) : (
-              <div className="flex-1 flex items-center justify-center bg-gray-50">
+              <div className="flex-1 min-h-0 flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg
@@ -210,11 +199,12 @@ export default function MessageCenter({
 
   return (
     <div className={`relative ${className}`}>
-      {/* Message Center Toggle Button */}
+      {/* Message Center Toggle Button - green brand */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 hover:scale-105"
+        className="fixed bottom-6 right-6 z-50 primary-green primary-green-hover text-white rounded-full p-4 shadow-lg transition-transform duration-200 hover:scale-105"
         aria-label="Open messages"
+        aria-pressed={isOpen}
       >
         {isOpen ? (
           <FiX className="w-6 h-6" />
@@ -226,7 +216,7 @@ export default function MessageCenter({
       {/* Message Center Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-40 flex items-end justify-end p-4">
-          {/* Backdrop */}
+          {/* Backdrop locks body scroll */}
           <div
             className="absolute inset-0 bg-black bg-opacity-25"
             onClick={() => setIsOpen(false)}
@@ -234,34 +224,36 @@ export default function MessageCenter({
 
           {/* Message Center Window */}
           <div className="relative bg-white rounded-lg shadow-2xl w-full max-w-md h-96 md:h-[500px] flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-indigo-600 text-white p-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Messages</h2>
+            {/* Header (non-scrolling) */}
+            <div className="shrink-0 primary-green text-white p-4 flex items-center justify-end">
               <button
                 onClick={() => setIsOpen(false)}
                 className="text-white hover:text-gray-200 transition-colors"
+                aria-label="Close messages"
               >
                 <FiX className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Content */}
-            <div className="flex-1 flex overflow-hidden">
+            {/* Content owns scroll; avoid modal outer scrolling */}
+            <div className="min-h-0 flex-1 flex overflow-hidden">
               {selectedConversation ? (
                 <ChatWindow
                   conversationId={selectedConversation}
                   onBack={handleBackToList}
                   onNewMessage={handleNewMessage}
-                  className="w-full"
+                  className="w-full min-h-0"
                 />
               ) : (
-                <ConversationList
-                  conversations={conversations}
-                  loading={loading}
-                  onConversationSelect={handleConversationSelect}
-                  onRefresh={loadConversations}
-                  className="w-full"
-                />
+                <div className="w-full overflow-y-auto">
+                  <ConversationList
+                    conversations={conversations}
+                    loading={loading}
+                    onConversationSelect={handleConversationSelect}
+                    onRefresh={loadConversations}
+                    className="w-full"
+                  />
+                </div>
               )}
             </div>
           </div>

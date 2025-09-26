@@ -78,7 +78,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
                 </div>
               )}
               {project.featured && (
-                <div className="absolute top-2 left-2 bg-indigo-600 text-white px-2 py-1 rounded text-xs font-medium">
+                <div className="absolute top-2 left-2 primary-green text-white px-2 py-1 rounded-custom text-xs font-medium">
                   Featured
                 </div>
               )}
@@ -89,7 +89,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
               <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <h3 className="text-xl font-semibold text-gray-900 hover:text-indigo-600">
+                    <h3 className="text-xl font-semibold text-gray-900 hover:text-green-700">
                       <Link href={`/project/${project.id}`}>
                         {project.title}
                       </Link>
@@ -113,7 +113,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
                       <span>{project.creatorName}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded-custom text-xs">
                         {project.department}
                       </span>
                     </div>
@@ -153,7 +153,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
                       <Link
                         href={project.previewUrl}
                         target="_blank"
-                        className="flex items-center gap-1 px-3 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
+                        className="flex items-center gap-1 px-3 py-2 btn-secondary text-sm"
                       >
                         <FiEye className="w-4 h-4" />
                         Preview
@@ -161,7 +161,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
                     )}
                     <Link
                       href={`/project/${project.id}`}
-                      className="flex items-center gap-1 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm"
+                      className="flex items-center gap-1 px-4 py-2 btn-primary text-sm"
                     >
                       <FiShoppingBag className="w-4 h-4" />
                       View Details
@@ -195,7 +195,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
           </div>
         )}
         {project.featured && (
-          <div className="absolute top-3 left-3 bg-indigo-600 text-white px-2 py-1 rounded text-xs font-medium">
+          <div className="absolute top-3 left-3 primary-green text-white px-2 py-1 rounded-custom text-xs font-medium">
             Featured
           </div>
         )}
@@ -213,7 +213,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
       {/* Content */}
       <div className="p-6">
         <div className="mb-3">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-indigo-600">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-green-700">
             <Link href={`/project/${project.id}`} className="line-clamp-2">
               {project.title}
             </Link>
@@ -226,7 +226,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
           <FiUser className="w-4 h-4" />
           <span>{project.creatorName}</span>
-          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs">
+          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-custom text-xs">
             {project.department}
           </span>
         </div>
@@ -269,7 +269,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
             <Link
               href={project.previewUrl}
               target="_blank"
-              className="flex-1 flex items-center justify-center gap-1 px-3 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 text-sm"
+              className="flex-1 flex items-center justify-center gap-1 px-3 py-2 btn-secondary text-sm"
             >
               <FiEye className="w-4 h-4" />
               Preview
@@ -277,7 +277,7 @@ export default function ProjectCard({ project, viewMode }: ProjectCardProps) {
           )}
           <Link
             href={`/project/${project.id}`}
-            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm"
+            className="flex-1 flex items-center justify-center gap-1 px-3 py-2 btn-primary text-sm"
           >
             <FiShoppingBag className="w-4 h-4" />
             Buy Now

@@ -93,11 +93,11 @@ export default function CookieConsent() {
           exit={{ opacity: 0, y: 100 }}
           className="fixed bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:max-w-md z-[100]"
         >
-          <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/60 p-6">
+          <div className="bg-glass rounded-custom border border-gray-200/60 p-6">
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <HiShieldCheck className="w-5 h-5 text-blue-600" />
+                <HiShieldCheck className="w-5 h-5 primary-green" />
                 <h3 className="font-semibold text-gray-900 text-sm">
                   Cookie Preferences
                 </h3>
@@ -119,7 +119,7 @@ export default function CookieConsent() {
             {/* Preferences Toggle */}
             <button
               onClick={() => setShowPreferences(!showPreferences)}
-              className="flex items-center justify-between w-full p-3 bg-gray-50 rounded-lg mb-4 hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-between w-full p-3 bg-gray-50 rounded-custom mb-4 hover:bg-gray-100 transition-colors"
             >
               <span className="text-sm font-medium text-gray-700">
                 Customize Preferences
@@ -165,7 +165,7 @@ export default function CookieConsent() {
                   ].map(({ key, label, description, alwaysOn }) => (
                     <div
                       key={key}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-custom"
                     >
                       <div>
                         <div className="font-medium text-sm text-gray-900">
@@ -185,7 +185,7 @@ export default function CookieConsent() {
                         />
                         <div
                           className={`w-11 h-6 rounded-full transition-colors ${
-                            preferences[key] ? "bg-blue-600" : "bg-gray-300"
+                            preferences[key] ? "primary-green" : "bg-gray-300"
                           }`}
                         >
                           <div
@@ -205,19 +205,19 @@ export default function CookieConsent() {
             <div className="flex gap-3">
               <button
                 onClick={rejectAll}
-                className="flex-1 px-4 py-2.5 text-gray-700 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm"
+                className="flex-1 px-4 py-2.5 text-black border border-gray-300 rounded-custom hover:bg-gray-50 transition-colors font-medium text-sm"
               >
                 Reject All
               </button>
               <button
                 onClick={savePreferences}
-                className="flex-1 px-4 py-2.5 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-colors font-medium text-sm"
+                className="flex-1 px-4 py-2.5 bg-gray-800 text-white rounded-custom hover:bg-gray-900 transition-colors font-medium text-sm"
               >
                 Save Preferences
               </button>
               <button
                 onClick={acceptAll}
-                className="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-colors font-medium text-sm"
+                className="flex-1 px-4 py-2.5 btn-primary font-medium text-sm"
               >
                 Accept All
               </button>

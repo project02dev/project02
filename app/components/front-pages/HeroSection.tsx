@@ -186,13 +186,13 @@ export default function HeroSection() {
             >
               <Link
                 href="/signup"
-                className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 btn-primary font-semibold text-base sm:text-lg transition-all duration-300"
               >
                 Start Your Project
                 <HiArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
 
-              <button className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl hover:border-blue-200 transition-all duration-300">
+              <button className="group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3 sm:py-4 btn-secondary font-semibold text-base sm:text-lg transition-all duration-300">
                 <HiPlay className="w-5 h-5 text-blue-600" />
                 Watch Demo
               </button>
@@ -201,12 +201,12 @@ export default function HeroSection() {
             {/* Email Input Section */}
             <motion.div
               variants={fadeInUp}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100"
+              className="bg-glass rounded-custom p-4 sm:p-6 border border-gray-100"
             >
               {subscribed ? (
-                <div className="flex flex-col sm:flex-row items-center gap-4 bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 text-green-900">
+                <div className="flex flex-col sm:flex-row items-center gap-4 bg-green-50 border border-green-200 rounded-custom p-4 sm:p-6 text-green-900">
                   <div className="flex-shrink-0 mb-2 sm:mb-0">
-                    <div className="bg-green-600 rounded-full p-3 flex items-center justify-center">
+                    <div className="primary-green rounded-full p-3 flex items-center justify-center">
                       <HiCheck className="w-7 h-7 text-white" />
                     </div>
                   </div>
@@ -248,7 +248,7 @@ export default function HeroSection() {
                     <input
                       type="email"
                       placeholder="Enter your email"
-                      className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                      className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-custom focus-green text-sm"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -256,7 +256,7 @@ export default function HeroSection() {
                     />
                     <button
                       type="submit"
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 text-sm"
+                      className="px-6 py-3 btn-primary transition-colors disabled:opacity-50 text-sm"
                       disabled={isLoading}
                     >
                       {isLoading ? "Subscribing..." : "Stay connected"}
@@ -293,7 +293,7 @@ export default function HeroSection() {
           <motion.div variants={fadeInUp} className="relative w-full">
             {/* Main Card */}
             <div className="relative bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden w-full max-w-lg mx-auto">
-              <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
+              <div className="aspect-video primary-green relative overflow-hidden">
                 <Image
                   src="/secondary.webp"
                   alt="Project Collaboration Illustration"
@@ -329,7 +329,7 @@ export default function HeroSection() {
             {/* Floating Testimonial Card */}
             <div className="absolute -bottom-6 left-0 sm:-left-6 bg-white rounded-2xl shadow-xl p-3 sm:p-4 border border-gray-100 max-w-xs w-5/6 sm:w-auto">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 primary-green rounded-full flex items-center justify-center text-white font-bold">
                   SC
                 </div>
                 <div>
@@ -346,7 +346,7 @@ export default function HeroSection() {
             </div>
 
             {/* Floating Stats Card */}
-            <div className="absolute -top-6 right-0 sm:-right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-2xl shadow-xl p-3 sm:p-4 w-32 text-center">
+            <div className="absolute -top-6 right-0 sm:-right-6 primary-green text-white rounded-custom p-3 sm:p-4 w-32 text-center">
               <div className="text-xl sm:text-2xl font-bold">20k+</div>
               <div className="text-xs sm:text-sm opacity-90">
                 Projects Completed

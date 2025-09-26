@@ -253,7 +253,7 @@ export default function ChatWindow({
         className={`flex items-center justify-center h-full bg-gray-50 ${className}`}
       >
         <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-600 mx-auto mb-4"></div>
           <p className="text-gray-500 text-lg">Loading conversation...</p>
         </div>
       </div>
@@ -262,18 +262,19 @@ export default function ChatWindow({
 
   return (
     <div className={`flex flex-col h-full bg-white ${className}`}>
-      {/* Modern Chat Header */}
-      <div className="bg-white border-b border-gray-200 p-4 shadow-sm">
-        <div className="flex items-center space-x-3">
+      {/* Fixed Chat Header (content scrolls under) */}
+      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-b border-gray-200 p-4">
+        <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="text-gray-600 hover:text-gray-800 transition-colors p-1 rounded-lg hover:bg-gray-100"
+            className="text-gray-600 hover:text-green-700 transition-colors p-1 rounded-lg hover:bg-gray-100"
+            aria-label="Back"
           >
             <FiArrowLeft className="w-5 h-5" />
           </button>
 
           <div className="relative">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+            <div className="w-10 h-10 primary-green rounded-full flex items-center justify-center text-white font-semibold">
               {otherUser?.avatar ? (
                 <img
                   src={otherUser.avatar}
@@ -300,13 +301,10 @@ export default function ChatWindow({
             </p>
           </div>
 
-          <button className="text-gray-600 hover:text-gray-800 transition-colors p-2 rounded-lg hover:bg-gray-100">
-            <FiMoreVertical className="w-5 h-5" />
-          </button>
         </div>
       </div>
 
-      {/* Messages Container */}
+      {/* Messages Container (scrolls under header) */}
       <div className="flex-1 overflow-y-auto bg-gray-50 p-4 space-y-3">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
@@ -388,45 +386,49 @@ export default function ChatWindow({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Reply Preview */}
-      {replyingTo && (
-        <div className="bg-gray-50 border-t border-gray-200 p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <p className="text-sm text-gray-600">
-                Replying to: {replyingTo.content.substring(0, 50)}
-                {replyingTo.content.length > 50 ? "..." : ""}
-              </p>
+      {/* Bottom composer stack (reply preview -> emoji -> input) stays fixed below messages */}
+      <div className="sticky bottom-0 z-10 bg-white">
+        {/* Reply Preview */}
+        {replyingTo && (
+          <div className="bg-gray-50 border-t border-gray-200 p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-sm text-gray-600">
+                  Replying to: {replyingTo.content.substring(0, 50)}
+                  {replyingTo.content.length > 50 ? "..." : ""}
+                </p>
+              </div>
+              <button
+                onClick={() => setReplyingTo(null)}
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Cancel reply"
+              >
+                ×
+              </button>
             </div>
-            <button
-              onClick={() => setReplyingTo(null)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              ×
-            </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Emoji Picker */}
-      {showEmojiPicker && (
-        <div className="border-t border-gray-200">
-          <EmojiPicker
-            onEmojiSelect={handleEmojiSelect}
-            onClose={() => setShowEmojiPicker(false)}
+        {/* Emoji Picker */}
+        {showEmojiPicker && (
+          <div className="border-t border-gray-200 bg-white">
+            <EmojiPicker
+              onEmojiSelect={handleEmojiSelect}
+              onClose={() => setShowEmojiPicker(false)}
+            />
+          </div>
+        )}
+
+        {/* Message Input */}
+        <div className="border-t border-gray-200 bg-white">
+          <MessageInput
+            onSendMessage={handleSendMessage}
+            onToggleEmoji={() => setShowEmojiPicker(!showEmojiPicker)}
+            disabled={loading}
+            replyingTo={replyingTo}
+            onCancelReply={() => setReplyingTo(null)}
           />
         </div>
-      )}
-
-      {/* Message Input */}
-      <div className="border-t border-gray-200">
-        <MessageInput
-          onSendMessage={handleSendMessage}
-          onToggleEmoji={() => setShowEmojiPicker(!showEmojiPicker)}
-          disabled={loading}
-          replyingTo={replyingTo}
-          onCancelReply={() => setReplyingTo(null)}
-        />
       </div>
     </div>
   );

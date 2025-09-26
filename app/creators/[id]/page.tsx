@@ -90,7 +90,7 @@ export default function CreatorProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading creator profile...</p>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default function CreatorProfilePage() {
           </p>
           <Link
             href="/creators"
-            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+            className="px-4 py-2 btn-primary"
           >
             Back to Creators
           </Link>
@@ -121,7 +121,7 @@ export default function CreatorProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm">
+      <div className="bg-white shadow-sm border-b border-green-100">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-6">
             {/* Profile Image and Basic Info */}
@@ -187,7 +187,7 @@ export default function CreatorProfilePage() {
                           href={creator.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-600 hover:text-indigo-600 transition-colors"
+                          className="text-gray-600 hover:text-green-700 transition-colors"
                         >
                           <FiGlobe className="w-5 h-5" />
                         </a>
@@ -197,7 +197,7 @@ export default function CreatorProfilePage() {
                           href={creator.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-600 hover:text-indigo-600 transition-colors"
+                          className="text-gray-600 hover:text-green-700 transition-colors"
                         >
                           <FiGithub className="w-5 h-5" />
                         </a>
@@ -207,7 +207,7 @@ export default function CreatorProfilePage() {
                           href={creator.linkedin}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-gray-600 hover:text-indigo-600 transition-colors"
+                          className="text-gray-600 hover:text-green-700 transition-colors"
                         >
                           <FiLinkedin className="w-5 h-5" />
                         </a>
@@ -228,7 +228,7 @@ export default function CreatorProfilePage() {
                     {user && creatorId !== user.uid && (
                       <button
                         onClick={handleMessageClick}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
+                        className="px-6 py-3 btn-primary rounded-lg flex items-center gap-2"
                       >
                         <FiMessageCircle className="w-4 h-4" />
                         Send Message
@@ -236,7 +236,7 @@ export default function CreatorProfilePage() {
                     )}
                     <Link
                       href={`/creators/${creatorId}/projects`}
-                      className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2 text-center"
+                      className="px-6 py-3 border border-green-200 text-green-700 rounded-lg hover:bg-green-50 transition-colors flex items-center gap-2 text-center"
                     >
                       <FiExternalLink className="w-4 h-4" />
                       View All Projects
@@ -338,7 +338,7 @@ export default function CreatorProfilePage() {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`py-4 px-1 border-b-2 font-medium text-sm ${
                     activeTab === tab.id
-                      ? "border-indigo-500 text-indigo-600"
+                      ? "border-green-600 text-green-700"
                       : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                   }`}
                 >
@@ -371,7 +371,7 @@ export default function CreatorProfilePage() {
                           {project.description}
                         </p>
                         <div className="flex items-center justify-between">
-                          <span className="text-lg font-bold text-indigo-600">
+                          <span className="text-lg font-bold text-green-700">
                             ${project.price}
                           </span>
                           <div className="flex items-center gap-1">
@@ -394,7 +394,7 @@ export default function CreatorProfilePage() {
                   <div className="text-center mt-8">
                     <Link
                       href={`/creators/${creatorId}/projects`}
-                      className="px-6 py-3 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors"
+                      className="px-6 py-3 border border-green-600 text-green-700 rounded-lg hover:bg-green-50 transition-colors"
                     >
                       View All {projects.length} Projects
                     </Link>
@@ -425,7 +425,7 @@ export default function CreatorProfilePage() {
                       {creator.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm"
+                          className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
                         >
                           {skill}
                         </span>
@@ -444,7 +444,7 @@ export default function CreatorProfilePage() {
                         {creator.workExperience.map((exp) => (
                           <div
                             key={exp.id}
-                            className="border-l-2 border-indigo-200 pl-4"
+                            className="border-l-2 border-green-200 pl-4"
                           >
                             <h4 className="font-medium text-gray-900">
                               {exp.title}

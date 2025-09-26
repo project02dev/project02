@@ -120,7 +120,7 @@ export default function ConversationList({
         className={`flex items-center justify-center h-full bg-white ${className}`}
       >
         <div className="text-center">
-          <FiRefreshCw className="w-8 h-8 animate-spin text-gray-400 mx-auto mb-2" />
+          <FiRefreshCw className="w-8 h-8 animate-spin text-gray-300 mx-auto mb-2" />
           <p className="text-gray-500">Loading conversations...</p>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function ConversationList({
         </p>
         <button
           onClick={onRefresh}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 btn-primary hover:primary-green-hover transition-colors"
         >
           <FiRefreshCw className="w-4 h-4" />
           Refresh
@@ -157,7 +157,7 @@ export default function ConversationList({
         <h3 className="font-medium text-gray-900">Conversations</h3>
         <button
           onClick={onRefresh}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
+          className="text-gray-400 hover:text-green-700 transition-colors"
           aria-label="Refresh conversations"
         >
           <FiRefreshCw className="w-4 h-4" />
@@ -173,12 +173,12 @@ export default function ConversationList({
             <div
               key={conversation.id}
               onClick={() => onConversationSelect(conversation.id)}
-              className="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+              className="p-4 border-b border-gray-100 hover:bg-green-50 cursor-pointer transition-colors"
             >
               <div className="flex items-start gap-3">
                 {/* Avatar */}
                 <div className="flex-shrink-0 relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-12 h-12 primary-green rounded-full flex items-center justify-center text-white font-semibold">
                     {otherParticipant?.avatar ? (
                       <img
                         src={otherParticipant.avatar}
@@ -195,7 +195,6 @@ export default function ConversationList({
                         .toUpperCase()
                     )}
                   </div>
-                  {/* Online indicator - you can add logic to determine if user is online */}
                   <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                 </div>
 
@@ -221,7 +220,7 @@ export default function ConversationList({
                   </div>
 
                   {conversation.projectId && (
-                    <p className="text-xs text-indigo-600 mt-1">
+                    <p className="text-xs text-green-700 mt-1">
                       📁 Project conversation
                     </p>
                   )}
