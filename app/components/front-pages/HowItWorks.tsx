@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   HiSearch,
   HiChat,
@@ -80,7 +81,8 @@ export default function HowItWorks() {
           </h2>
 
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            A clear process for students and creators to collaborate with confidence.
+            A clear process for students and creators to collaborate with
+            confidence.
           </p>
         </motion.div>
 
@@ -148,7 +150,8 @@ export default function HowItWorks() {
               <h3 className="text-2xl font-bold text-gray-900">For Students</h3>
             </div>
             <p className="text-gray-700 mb-6 leading-relaxed">
-              Learn faster with quality projects and optional custom work tailored to your course.
+              Learn faster with quality projects and optional custom work
+              tailored to your course.
             </p>
             <ul className="space-y-3">
               {[
@@ -164,8 +167,15 @@ export default function HowItWorks() {
               ))}
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/explore" className="px-5 py-3 btn-primary text-sm">Explore Projects</a>
-              <a href="/signup?role=student" className="px-5 py-3 btn-secondary text-sm">Start as Student</a>
+              <a href="/explore" className="px-5 py-3 btn-primary text-sm">
+                Explore Projects
+              </a>
+              <a
+                href="/signup?role=student"
+                className="px-5 py-3 btn-secondary text-sm"
+              >
+                Start as Student
+              </a>
             </div>
           </div>
 
@@ -177,7 +187,8 @@ export default function HowItWorks() {
               <h3 className="text-2xl font-bold text-gray-900">For Creators</h3>
             </div>
             <p className="text-gray-700 mb-6 leading-relaxed">
-              Showcase expertise, earn reliably, and grow a reputation helping students succeed.
+              Showcase expertise, earn reliably, and grow a reputation helping
+              students succeed.
             </p>
             <ul className="space-y-3">
               {[
@@ -193,8 +204,19 @@ export default function HowItWorks() {
               ))}
             </ul>
             <div className="mt-6 flex flex-wrap gap-3">
-              <a href="/signup?role=creator" className="px-5 py-3 btn-primary text-sm">Become a Creator</a>
-              <a href="/creators" className="px-5 py-3 btn-secondary text-sm">View Top Creators</a>
+              <a
+                href="/signup?role=creator"
+                className="px-5 py-3 btn-primary text-sm"
+              >
+                Become a Creator
+              </a>
+              <a></a>
+              <Link
+                href="/creators"
+                className="px-5 py-3 btn-secondary text-sm"
+              >
+                View Top Creators
+              </Link>
             </div>
           </div>
         </motion.div>
@@ -212,13 +234,17 @@ export default function HowItWorks() {
               Get started in minutes
             </h3>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Pick a project or open a request. Collaborate, pay safely, and receive quality results.
+              Pick a project or open a request. Collaborate, pay safely, and
+              receive quality results.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="/explore" className="px-8 py-4 btn-primary text-lg">
                 Browse Projects
               </a>
-              <a href="/signup?role=creator" className="px-8 py-4 btn-secondary text-lg">
+              <a
+                href="/signup?role=creator"
+                className="px-8 py-4 btn-secondary text-lg"
+              >
                 Become a Creator
               </a>
             </div>
